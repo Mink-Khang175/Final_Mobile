@@ -5,6 +5,8 @@
 .kotlin/
 .gradle
 /local.properties
+app/google-services.json
+firebase/firebase_seed.json
 /.env
 /.env.*
 *.env
