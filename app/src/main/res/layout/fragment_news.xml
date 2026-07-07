@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_home_premium_screen">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/newsScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingBottom="180dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="30dp">
+
+            <include
+                android:id="@+id/appHeader"
+                layout="@layout/component_app_header" />
+
+            <include
+                android:id="@+id/newsHeader"
+                layout="@layout/component_news_header" />
+
+            <include
+                android:id="@+id/newsSearch"
+                layout="@layout/component_news_search_bar" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvNewsCategories"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginTop="16dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:paddingStart="20dp"
+                android:paddingEnd="10dp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutFeaturedHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="24dp">
+
+                <View
+                    android:id="@+id/indicatorFeatured"
+                    android:layout_width="4dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/bg_home_section_indicator"
+                    app:layout_constraintBottom_toBottomOf="@id/tvFeaturedSectionTitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvFeaturedSectionTitle" />
+
+                <TextView
+                    android:id="@+id/tvFeaturedSectionTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:includeFontPadding="false"
+                    android:letterSpacing="0"
+                    android:text="Tin n&#7893;i b&#7853;t"
+                    android:textColor="@color/stadium_ink"
+                    android:textSize="23sp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintBottom_toBottomOf="@id/tvFeaturedSectionMeta"
+                    app:layout_constraintEnd_toStartOf="@id/tvFeaturedSectionMeta"
+                    app:layout_constraintStart_toEndOf="@id/indicatorFeatured"
+                    app:layout_constraintTop_toTopOf="@id/tvFeaturedSectionMeta" />
+
+                <TextView
+                    android:id="@+id/tvFeaturedSectionMeta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:gravity="center"
+                    android:text="VPF NEWS"
+                    android:textColor="@color/red_energy"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <include
+                android:id="@+id/featuredNews"
+                layout="@layout/component_featured_news_card" />
+
+            <LinearLayout
+                android:id="@+id/tvLatestNewsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="28dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="4dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/bg_home_section_indicator" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-condensed"
+                    android:includeFontPadding="false"
+                    android:letterSpacing="0"
+                    android:text="M&#7899;i nh&#7845;t"
+                    android:textColor="@color/stadium_ink"
+                    android:textSize="23sp"
+                    android:textStyle="bold|italic" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvNewsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never" />
+
+            <LinearLayout
+                android:id="@+id/layoutLoading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="210dp"
+                    android:background="@drawable/bg_news_card" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="118dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_news_card" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="118dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_news_card" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="28dp"
+                android:background="@drawable/bg_news_card"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="28dp"
+                android:visibility="gone">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:src="@drawable/ic_nav_news"
+                    app:tint="@color/primary_red" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center"
+                    android:text="Ch&#432;a c&#243; tin t&#7913;c"
+                    android:textColor="@color/dark_icon"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="2dp"
+                    android:text="H&#227;y th&#7917; &#273;&#7893;i b&#7897; l&#7885;c ho&#7863;c t&#236;m ki&#7871;m b&#7857;ng t&#7915; kh&#243;a kh&#225;c."
+                    android:textColor="@color/dark_gray_text"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="28dp"
+                android:background="@drawable/bg_news_card"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="28dp"
+                android:visibility="gone">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:src="@drawable/ic_nav_news"
+                    app:tint="@color/primary_red" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center"
+                    android:text="Kh&#244;ng t&#7843;i &#273;&#432;&#7907;c tin t&#7913;c"
+                    android:textColor="@color/dark_icon"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvErrorMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:lineSpacingExtra="2dp"
+                    android:text="Vui l&#242;ng ki&#7875;m tra k&#7871;t n&#7889;i v&#224; th&#7917; l&#7841;i."
+                    android:textColor="@color/dark_gray_text"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/btnRetryNews"
+                    android:layout_width="132dp"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="18dp"
+                    android:background="@drawable/bg_home_red_button"
+                    android:gravity="center"
+                    android:text="TH&#7916; L&#7840;I"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/bottomNav"
+        layout="@layout/component_bottom_nav_news" />
+</FrameLayout>
+

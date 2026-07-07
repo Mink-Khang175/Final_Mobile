@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ShapeAppearance_VLeague_Small">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="ShapeAppearance_VLeague_Medium">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+    </style>
+
+    <style name="ShapeAppearance_VLeague_Large">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">26dp</item>
+    </style>
+
+    <style name="Widget.VLeague.Button" parent="Widget.Material3.Button">
+        <item name="android:layout_height">56dp</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:paddingHorizontal">22dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="cornerRadius">999dp</item>
+        <item name="elevation">0dp</item>
+        <item name="iconTint">@color/colorOnPrimary</item>
+        <item name="rippleColor">@color/shop_dynamic_red_soft</item>
+        <item name="shapeAppearance">@style/ShapeAppearance_VLeague_Medium</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <style name="Widget.VLeague.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:layout_height">48dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="cornerRadius">999dp</item>
+        <item name="elevation">0dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance_VLeague_Medium</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <style name="Widget.VLeague.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:layout_height">56dp</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:paddingHorizontal">22dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="backgroundTint">@color/colorSurface</item>
+        <item name="cornerRadius">999dp</item>
+        <item name="elevation">0dp</item>
+        <item name="iconTint">@color/colorPrimary</item>
+        <item name="rippleColor">@color/shop_dynamic_red_soft</item>
+        <item name="shapeAppearance">@style/ShapeAppearance_VLeague_Medium</item>
+        <item name="strokeColor">@color/colorPrimary</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+
+    <style name="Widget.VLeague.TextInputLayout.FilledBox" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/colorSurfaceVariant</item>
+        <item name="boxBackgroundMode">filled</item>
+        <item name="boxCornerRadiusBottomEnd">20dp</item>
+        <item name="boxCornerRadiusBottomStart">20dp</item>
+        <item name="boxCornerRadiusTopEnd">20dp</item>
+        <item name="boxCornerRadiusTopStart">20dp</item>
+        <item name="boxStrokeColor">@color/transparent</item>
+        <item name="boxStrokeErrorColor">@color/colorPrimary</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="endIconTint">@color/dark_gray_text</item>
+        <item name="hintTextColor">@color/dark_gray_text</item>
+        <item name="shapeAppearance">@style/ShapeAppearance_VLeague_Large</item>
+        <item name="startIconTint">@color/dark_gray_text</item>
+    </style>
+
+    <style name="Widget.VLeague.Card" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">@color/colorSurface</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardForegroundColor">@color/transparent</item>
+        <item name="cardPreventCornerOverlap">true</item>
+        <item name="cardUseCompatPadding">false</item>
+        <item name="shapeAppearance">@style/ShapeAppearance_VLeague_Large</item>
+        <item name="strokeColor">@color/colorOutline</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="MatchCenterTab">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/dark_gray_text</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MatchCenterSectionTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">@color/stadium_ink</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold|italic</item>
+    </style>
+
+    <style name="MatchCenterCardText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_match_center_card</item>
+        <item name="android:lineSpacingExtra">6dp</item>
+        <item name="android:padding">18dp</item>
+        <item name="android:textColor">@color/dark_gray_text</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ProfileActivityCard">
+        <item name="android:layout_height">108dp</item>
+        <item name="android:background">@drawable/bg_profile_activity_dark</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">14dp</item>
+    </style>
+
+    <style name="ProfileActivityIcon">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:background">@drawable/bg_admin_icon_chip</item>
+        <item name="android:padding">7dp</item>
+    </style>
+
+    <style name="ProfileActivityTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textColor">@color/slate_caption</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ProfileActivitySubtitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/stadium_ink</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ProfileSectionCard">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginHorizontal">20dp</item>
+        <item name="android:background">@drawable/bg_profile_panel_dark</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingHorizontal">16dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>
+
+    <style name="ProfileSectionTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:textColor">@color/stadium_ink</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ShopCategoryChip">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">38dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minWidth">78dp</item>
+        <item name="android:paddingHorizontal">16dp</item>
+        <item name="android:textColor">@color/stadium_ink</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ClubProfileTab">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingHorizontal">10dp</item>
+    </style>
+
+    <style name="ClubProfileTabLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:gravity">center</item>
+        <item name="android:letterSpacing">0.12</item>
+        <item name="android:textColor">@color/sports_nav_inactive</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ClubProfileTabIndicator">
+        <item name="android:layout_width">28dp</item>
+        <item name="android:layout_height">3dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:background">@drawable/bg_club_tab_indicator</item>
+        <item name="android:visibility">invisible</item>
+    </style>
+
+    <style name="ShopProductImageShape">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">6dp</item>
+    </style>
+
+    <style name="HeaderLogoShape">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">6dp</item>
+    </style>
+
+    <style name="ProductSizeOption">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">42dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/bg_product_size_unselected</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AuthTextInputLayout" parent="Widget.VLeague.TextInputLayout.FilledBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="AthleticDropdownTextInputLayout" parent="Widget.VLeague.TextInputLayout.FilledBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="endIconMode">dropdown_menu</item>
+    </style>
+
+    <style name="AuthTextInputEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">58dp</item>
+        <item name="android:background">@null</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:paddingVertical">0dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/dark_icon</item>
+        <item name="android:textColorHint">@color/dark_gray_text</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="AuthSocialButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/bg_auth_social_button</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="AuthSocialButtonText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:textColor">@color/dark_icon</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

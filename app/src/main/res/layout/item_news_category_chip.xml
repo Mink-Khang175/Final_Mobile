@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tvCategoryChip"
+    android:layout_width="wrap_content"
+    android:layout_height="38dp"
+    android:layout_marginEnd="10dp"
+    android:background="@drawable/bg_news_chip_inactive"
+    android:gravity="center"
+    android:minWidth="76dp"
+    android:paddingHorizontal="16dp"
+    android:text="Tất cả"
+    android:textColor="@color/dark_gray_text"
+    android:textSize="13sp"
+    android:textStyle="bold" />

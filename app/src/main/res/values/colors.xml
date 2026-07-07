@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Premium Light Sport palette -->
+    <color name="bg_app">#F4F6FA</color>
+    <color name="bg_card">#FFFFFF</color>
+    <color name="navy_deep">#06122C</color>
+    <color name="navy_light">#1E293B</color>
+    <color name="gold_champion">#DCAE1D</color>
+    <color name="red_energy">#E53E3E</color>
+    <color name="orange_spark">#FF7A00</color>
+    <color name="green_turf">#12B76A</color>
+    <color name="slate_caption">#64748B</color>
+
+    <color name="colorPrimary">#06122C</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorSecondary">#DCAE1D</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorBackground">#F4F6FA</color>
+    <color name="colorOnSurface">#06122C</color>
+    <color name="colorSurfaceVariant">#F1F5F9</color>
+    <color name="colorOutline">#E2E8F0</color>
+
+    <color name="primary_red">#06122C</color>
+    <color name="secondary_red">#1E293B</color>
+    <color name="vleague_dark_blue">#06122C</color>
+    <color name="primary_orange">#DCAE1D</color>
+    <color name="light_orange">#FEF3C7</color>
+    <color name="yellow_warning">#DCAE1D</color>
+    <color name="zone_championship_green">#DCAE1D</color>
+    <color name="zone_relegation_red">#E53E3E</color>
+    <color name="shop_dynamic_red">#06122C</color>
+    <color name="shop_dynamic_red_soft">#E2E8F0</color>
+    <color name="shop_dynamic_orange">#DCAE1D</color>
+    <color name="shop_product_image_bg">#F1F5F9</color>
+    <color name="sports_ash_gray">#F4F6FA</color>
+    <color name="sports_graphite">#06122C</color>
+    <color name="sports_medium_gray">#64748B</color>
+    <color name="sports_outline">#E2E8F0</color>
+    <color name="sports_nav_inactive">#64748B</color>
+
+    <color name="stadium_night">#F4F6FA</color>
+    <color name="stadium_deep">#F1F5F9</color>
+    <color name="stadium_ink">#06122C</color>
+    <color name="stadium_surface">#FFFFFF</color>
+    <color name="stadium_mist">#E2E8F0</color>
+    <color name="pitch_green">#12B76A</color>
+    <color name="pitch_green_soft">#ECFDF5</color>
+    <color name="premium_gold">#DCAE1D</color>
+    <color name="premium_card">#FFFFFF</color>
+
+    <color name="dark_icon">#06122C</color>
+    <color name="dark_gray_text">#64748B</color>
+    <color name="gray_border">#E2E8F0</color>
+    <color name="light_gray_bg">#F4F6FA</color>
+    <color name="very_light_gray_surface">#F1F5F9</color>
+
+    <!-- Shop specific colors -->
+    <color name="shop_primary_red">#06122C</color>
+    <color name="shop_bg_light_gray">#F4F6FA</color>
+    <color name="shop_icon_dark">#06122C</color>
+    <color name="shop_accent_orange">#DCAE1D</color>
+
+    <color name="black_alpha_5">#0D000000</color>
+    <color name="black_alpha_10">#1A000000</color>
+    <color name="black_alpha_25">#40000000</color>
+    <color name="black_alpha_45">#73000000</color>
+    <color name="black_alpha_60">#99000000</color>
+    <color name="black_alpha_75">#BF000000</color>
+    <color name="white_alpha_12">#1FFFFFFF</color>
+    <color name="white_alpha_20">#33FFFFFF</color>
+    <color name="white_alpha_40">#66FFFFFF</color>
+    <color name="white_alpha_60">#99FFFFFF</color>
+    <color name="white_alpha_70">#B3FFFFFF</color>
+    <color name="white_alpha_80">#CCFFFFFF</color>
+    <color name="white_alpha_85">#D9FFFFFF</color>
+    <color name="dark_icon_alpha_8">#140F172A</color>
+    <color name="secondary_red_alpha_10">#1A06122C</color>
+    <color name="pitch_green_alpha_14">#2412B76A</color>
+    <color name="premium_gold_alpha_18">#2EDCAE1D</color>
+    <color name="dark_gray_alpha_60">#9964748B</color>
+    <color name="badge_bronze">#B7791F</color>
+    <color name="badge_bronze_soft">#FFF4DE</color>
+    <color name="badge_silver">#64748B</color>
+    <color name="badge_silver_soft">#EEF4FA</color>
+    <color name="badge_gold">#DCAE1D</color>
+    <color name="badge_gold_soft">#FFF7D6</color>
+    <color name="badge_platinum">#2563EB</color>
+    <color name="badge_platinum_soft">#E8F0FF</color>
+    <color name="badge_diamond">#0891B2</color>
+    <color name="badge_diamond_soft">#E0F7FF</color>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="round_chip_height">36dp</dimen>
+    <dimen name="round_chip_horizontal_padding">14dp</dimen>
+    <dimen name="round_chip_spacing">8dp</dimen>
+</resources>

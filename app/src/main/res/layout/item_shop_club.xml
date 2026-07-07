@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="72dp"
+    android:layout_height="72dp"
+    android:layout_gravity="center_vertical"
+    android:layout_marginEnd="22dp"
+    android:background="@drawable/bg_shop_club_tile"
+    android:clickable="true"
+    android:elevation="3dp"
+    android:focusable="true"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="0dp"
+        android:padding="3dp">
+
+        <ImageView
+            android:id="@+id/imgClub"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/club_logo"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_logo" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvClubName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@color/stadium_ink"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+</LinearLayout>

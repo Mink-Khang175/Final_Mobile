@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen_field">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:paddingBottom="180dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <include
+            android:id="@+id/appHeader"
+            layout="@layout/component_app_header" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardHeroPromo"
+            android:layout_width="match_parent"
+            android:layout_height="214dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="22dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="@color/premium_card"
+            app:strokeWidth="0dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imgHeroPromo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/svd" />
+
+                <VideoView
+                    android:id="@+id/videoHeroPromo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_shop_hero_scrim" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_shop_orange_pill"
+                        android:paddingHorizontal="11dp"
+                        android:paddingVertical="5dp"
+                        android:text="MỚI VỀ"
+                        android:textColor="@color/white"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:lineSpacingExtra="2dp"
+                        android:maxLines="2"
+                        android:text="Phụ kiện bóng đá"
+                        android:textColor="@color/white"
+                        android:textSize="23sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:lineSpacingExtra="2dp"
+                        android:maxLines="2"
+                        android:text="Bóng, vớ và phụ kiện ra sân đã sẵn sàng."
+                        android:textColor="@color/white_alpha_80"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/btnHeroShopNow"
+                        android:layout_width="126dp"
+                        android:layout_height="38dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_home_white_button"
+                        android:gravity="center"
+                        android:text="MUA NGAY"
+                        android:textColor="@color/shop_dynamic_red"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:id="@+id/layoutShopActions"
+            android:layout_width="match_parent"
+            android:layout_height="112dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/actionTickets"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_shop_action_simple"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_ticket_24"
+                    app:tint="@color/premium_gold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:letterSpacing="0.06"
+                    android:text="Vé"
+                    android:textColor="@color/stadium_ink"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/actionJerseys"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_shop_action_simple"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_jersey_24"
+                    app:tint="@color/red_energy" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:letterSpacing="0.06"
+                    android:text="Áo đấu"
+                    android:textColor="@color/stadium_ink"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/actionFanGear"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_shop_action_simple"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_nav_matches"
+                    app:tint="@color/orange_spark" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:letterSpacing="0.06"
+                    android:text="Phụ kiện"
+                    android:textColor="@color/stadium_ink"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutShopByClubHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="28dp">
+
+            <TextView
+                android:id="@+id/tvShopByClubTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="sans-serif-condensed"
+                android:includeFontPadding="false"
+                android:letterSpacing="0"
+                android:text="Cửa hàng theo CLB"
+                android:textColor="@color/stadium_ink"
+                android:textSize="24sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/shopByClubIndicator"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/shopByClubIndicator"
+                android:layout_width="4dp"
+                android:layout_height="22dp"
+                android:background="@drawable/bg_home_section_indicator"
+                app:layout_constraintBottom_toBottomOf="@id/tvShopByClubTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvShopByClubTitle" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvShopClubs"
+            android:layout_width="match_parent"
+            android:layout_height="82dp"
+            android:layout_marginTop="12dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="never"
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal" />
+
+        <HorizontalScrollView
+            android:id="@+id/scrollShopCategories"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="14dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingStart="20dp"
+            android:paddingEnd="10dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/chipAll"
+                    style="@style/ShopCategoryChip"
+                    android:background="@drawable/bg_shop_chip_selected"
+                    android:text="Tất cả"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/chipJerseys"
+                    style="@style/ShopCategoryChip"
+                    android:background="@drawable/bg_shop_chip_unselected"
+                    android:text="Trái bóng" />
+
+                <TextView
+                    android:id="@+id/chipSocks"
+                    style="@style/ShopCategoryChip"
+                    android:background="@drawable/bg_shop_chip_unselected"
+                    android:text="Vớ bóng đá" />
+
+                <TextView
+                    android:id="@+id/chipAccessories"
+                    style="@style/ShopCategoryChip"
+                    android:background="@drawable/bg_shop_chip_unselected"
+                    android:text="Phụ kiện" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutPopularHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:visibility="gone">
+
+            <View
+                android:id="@+id/popularIndicator"
+                android:layout_width="4dp"
+                android:layout_height="22dp"
+                android:background="@drawable/bg_home_section_indicator"
+                app:layout_constraintBottom_toBottomOf="@id/tvPopularMerchandise"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvPopularMerchandise" />
+
+            <TextView
+                android:id="@+id/tvPopularMerchandise"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="sans-serif-condensed"
+                android:includeFontPadding="false"
+                android:letterSpacing="0"
+                android:text="Sản phẩm nổi bật"
+                android:textColor="@color/stadium_ink"
+                android:textSize="24sp"
+                android:textStyle="bold|italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/popularIndicator"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tvShopError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_news_card"
+            android:gravity="center"
+            android:padding="14dp"
+            android:textColor="@color/dark_gray_text"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/progressShop"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="18dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvShopProducts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="never"
+            android:paddingHorizontal="14dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="22dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardShopTicketCta"
+            android:layout_width="match_parent"
+            android:layout_height="214dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="22dp"
+            app:cardElevation="6dp"
+            app:strokeColor="@color/white_alpha_40"
+            app:strokeWidth="1dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/svd" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_home_banner_scrim" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="18dp"
+                    android:paddingVertical="18dp">
+
+                    <TextView
+                        android:id="@+id/tvShopTicketSeason"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_shop_orange_pill"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="5dp"
+                        android:text="V.LEAGUE 25/26"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvShopTicketStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/black_alpha_25"
+                        android:paddingHorizontal="9dp"
+                        android:paddingVertical="5dp"
+                        android:text="Đang mở bán"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvShopTicketTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:includeFontPadding="false"
+                        android:text="ĐẶT VÉ MÙA GIẢI MỚI"
+                        android:textColor="@color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold|italic"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvShopTicketSeason" />
+
+                    <TextView
+                        android:id="@+id/tvShopTicketDesc"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:lineSpacingExtra="2dp"
+                        android:maxLines="2"
+                        android:text="Chọn sân, chọn trận và giữ ghế yêu thích cho lịch đấu 25/26."
+                        android:textColor="@color/white_alpha_85"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvShopTicketTitle" />
+
+                    <TextView
+                        android:id="@+id/btnShopTicket"
+                        android:layout_width="158dp"
+                        android:layout_height="44dp"
+                        android:background="@drawable/bg_home_outline_red_button"
+                        android:gravity="center"
+                        android:text="ĐẶT VÉ NGAY"
+                        android:textColor="@color/white"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/bottomNav"
+        layout="@layout/component_bottom_nav_shop" />
+</FrameLayout>
+

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_home_premium_screen">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingHorizontal="22dp"
+            android:paddingTop="56dp"
+            android:paddingBottom="28dp">
+
+            <ImageView
+                android:id="@+id/imgReceiptLogo"
+                android:layout_width="74dp"
+                android:layout_height="50dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_logo" />
+
+            <TextView
+                android:id="@+id/tvOrderSuccessTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:letterSpacing="0"
+                android:textColor="@color/stadium_ink"
+                android:textSize="31sp"
+                android:textStyle="bold|italic"
+                tools:text="Đặt vé" />
+
+            <TextView
+                android:id="@+id/tvOrderSuccessHeadline"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_success_status_pill"
+                android:gravity="center"
+                android:minWidth="142dp"
+                android:paddingHorizontal="14dp"
+                android:textColor="@color/stadium_ink"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="Chờ xác nhận" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/layoutSuccessContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="3dp"
+                app:strokeColor="@color/colorOutline"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="18dp"
+                    android:paddingTop="24dp"
+                    android:paddingBottom="18dp">
+
+                    <FrameLayout
+                        android:id="@+id/successIconContainer"
+                        android:layout_width="58dp"
+                        android:layout_height="58dp"
+                        android:background="@drawable/bg_success_icon_soft"
+                        android:padding="14dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/tvSuccessIcon"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/order_success_title"
+                            android:src="@drawable/ic_check_circle_48"
+                            app:tint="@color/pitch_green" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/tvOrderSuccessSubtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:gravity="center"
+                        android:lineSpacingExtra="4dp"
+                        android:textColor="@color/slate_caption"
+                        android:textSize="14sp"
+                        tools:text="Đơn hàng đã được ghi nhận và đang chờ admin xác nhận thanh toán." />
+
+                    <LinearLayout
+                        android:id="@+id/cardOrderId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/bg_success_receipt_card"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="14dp">
+
+                        <TextView
+                            android:id="@+id/tvOrderLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/slate_caption"
+                            android:textSize="12sp"
+                            tools:text="Mã vé" />
+
+                        <TextView
+                            android:id="@+id/tvOrderId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:ellipsize="middle"
+                            android:gravity="start"
+                            android:maxLines="1"
+                            android:textColor="@color/stadium_ink"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            tools:text="TICKET1783350601613" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layoutSuccessActions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/btnTrackOrder"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:background="@drawable/bg_success_primary_button"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            tools:text="XEM VÉ CỦA TÔI" />
+
+                        <TextView
+                            android:id="@+id/btnBackToHome"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/bg_success_secondary_button"
+                            android:gravity="center"
+                            android:textColor="@color/stadium_ink"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            tools:text="VỀ TRANG CHỦ" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</FrameLayout>

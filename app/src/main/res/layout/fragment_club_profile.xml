@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollClubProfile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:paddingBottom="180dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/layoutClubHero"
+                android:layout_width="match_parent"
+                android:layout_height="318dp">
+
+                <ImageView
+                    android:id="@+id/imgClubHero"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/svd" />
+
+                <View
+                    android:id="@+id/viewClubHeroTint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_club_profile_hero_scrim" />
+
+                <ImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="34dp"
+                    android:background="@drawable/bg_header_action"
+                    android:contentDescription="Quay lại"
+                    android:padding="11dp"
+                    android:src="@drawable/ic_arrow_left_24"
+                    app:tint="@color/primary_red" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="22dp"
+                    android:paddingBottom="24dp">
+
+                    <TextView
+                        android:id="@+id/tvClubBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed"
+                        android:letterSpacing="0.1"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="6dp"
+                        android:text="CLB V.LEAGUE"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvClubName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="sans-serif-condensed"
+                        android:includeFontPadding="false"
+                        android:maxLines="2"
+                        android:text="CLB V.LEAGUE"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textSize="38sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="76dp"
+                            android:layout_height="76dp"
+                            android:background="@drawable/bg_club_profile_logo_card"
+                            android:elevation="2dp"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:id="@+id/imgClubLogo"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:contentDescription="@string/club_logo"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_logo" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvClubFounded"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="Thành lập --"
+                                android:textColor="@color/white_alpha_85"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvClubCoach"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="7dp"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="Đang cập nhật HLV"
+                                android:textColor="@color/white_alpha_85"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvClubStadium"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="7dp"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="Đang cập nhật sân nhà"
+                                android:textColor="@color/white_alpha_85"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBuyTickets"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="18dp"
+                android:text="MUA VÉ"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_ticket_24"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                app:iconTint="@color/white" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="14dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/layoutClubTabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:background="@drawable/bg_club_profile_tabs"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="12dp">
+
+                    <LinearLayout
+                        android:id="@+id/tabOverview"
+                        style="@style/ClubProfileTab"
+                        android:minWidth="88dp">
+
+                        <TextView
+                            android:id="@+id/tvTabOverview"
+                            style="@style/ClubProfileTabLabel"
+                            android:text="TỔNG QUAN" />
+
+                        <View
+                            android:id="@+id/indicatorOverview"
+                            style="@style/ClubProfileTabIndicator" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tabStatistics"
+                        style="@style/ClubProfileTab"
+                        android:minWidth="88dp">
+
+                        <TextView
+                            android:id="@+id/tvTabStatistics"
+                            style="@style/ClubProfileTabLabel"
+                            android:text="THỐNG KÊ" />
+
+                        <View
+                            android:id="@+id/indicatorStatistics"
+                            style="@style/ClubProfileTabIndicator" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tabPlayers"
+                        style="@style/ClubProfileTab"
+                        android:minWidth="88dp">
+
+                        <TextView
+                            android:id="@+id/tvTabPlayers"
+                            style="@style/ClubProfileTabLabel"
+                            android:text="CẦU THỦ" />
+
+                        <View
+                            android:id="@+id/indicatorPlayers"
+                            style="@style/ClubProfileTabIndicator" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tabShop"
+                        style="@style/ClubProfileTab"
+                        android:minWidth="88dp">
+
+                        <TextView
+                            android:id="@+id/tvTabShop"
+                            style="@style/ClubProfileTabLabel"
+                            android:text="CỬA HÀNG" />
+
+                        <View
+                            android:id="@+id/indicatorShop"
+                            style="@style/ClubProfileTabIndicator" />
+                    </LinearLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <ProgressBar
+                android:id="@+id/progressClub"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="18dp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/contentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="22dp"
+                android:paddingBottom="34dp" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/bottomNav"
+        layout="@layout/component_bottom_nav_shop" />
+</FrameLayout>
+

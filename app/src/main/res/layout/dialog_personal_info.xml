@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:overScrollMode="never">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="4dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilProfileName"
+            style="@style/AuthTextInputLayout"
+            android:hint="Họ và tên"
+            app:hintEnabled="false"
+            app:startIconDrawable="@drawable/ic_person_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtProfileName"
+                style="@style/AuthTextInputEditText"
+                android:layout_height="66dp"
+                android:hint="Họ và tên"
+                android:inputType="textPersonName"
+                android:paddingTop="10dp"
+                tools:text="Ho Minh Khang" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilProfilePhone"
+            style="@style/AuthTextInputLayout"
+            android:layout_marginTop="12dp"
+            android:hint="Số điện thoại"
+            app:hintEnabled="false"
+            app:startIconDrawable="@drawable/ic_person_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtProfilePhone"
+                style="@style/AuthTextInputEditText"
+                android:layout_height="66dp"
+                android:hint="Số điện thoại"
+                android:inputType="phone"
+                android:paddingTop="10dp"
+                tools:text="0901234567" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilCity"
+            style="@style/AthleticDropdownTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:hint="Tỉnh / Thành phố"
+            app:hintEnabled="false"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:startIconDrawable="@drawable/ic_location_24">
+
+            <AutoCompleteTextView
+                android:id="@+id/dropdownCity"
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                android:hint="Chọn tỉnh / thành phố"
+                android:inputType="none"
+                android:paddingTop="10dp"
+                android:textColor="@color/dark_icon"
+                android:textSize="15sp"
+                tools:text="Thành phố Hồ Chí Minh" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilDistrict"
+            style="@style/AthleticDropdownTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:enabled="false"
+            android:hint="Quận / Huyện"
+            app:hintEnabled="false"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:startIconDrawable="@drawable/ic_location_24">
+
+            <AutoCompleteTextView
+                android:id="@+id/dropdownDistrict"
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                android:enabled="false"
+                android:hint="Chọn quận / huyện"
+                android:inputType="none"
+                android:paddingTop="10dp"
+                android:textColor="@color/dark_icon"
+                android:textSize="15sp"
+                tools:text="Quận 1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilWard"
+            style="@style/AthleticDropdownTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:enabled="false"
+            android:hint="Phường / Xã"
+            app:hintEnabled="false"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:startIconDrawable="@drawable/ic_location_24">
+
+            <AutoCompleteTextView
+                android:id="@+id/dropdownWard"
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                android:enabled="false"
+                android:hint="Chọn phường / xã"
+                android:inputType="none"
+                android:paddingTop="10dp"
+                android:textColor="@color/dark_icon"
+                android:textSize="15sp"
+                tools:text="Phường Bến Nghé" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilProfileStreet"
+            style="@style/AuthTextInputLayout"
+            android:layout_marginTop="12dp"
+            android:hint="Số nhà / Tên đường"
+            app:hintEnabled="false"
+            app:startIconDrawable="@drawable/ic_location_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtProfileStreet"
+                style="@style/AuthTextInputEditText"
+                android:layout_height="66dp"
+                android:hint="Số nhà / Tên đường"
+                android:inputType="textPostalAddress"
+                android:paddingTop="10dp"
+                tools:text="12 Nguyen Trai" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tvProfilePaymentTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Thanh toán mặc định"
+            android:textColor="@color/dark_icon"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <RadioGroup
+            android:id="@+id/rgProfilePayment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/rbProfileCod"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:buttonTint="@color/shop_dynamic_red"
+                android:drawableStart="@drawable/ic_cash_24"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:text="Thanh toán khi nhận hàng"
+                android:textColor="@color/dark_icon"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/rbProfileVietinBank"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:buttonTint="@color/shop_dynamic_red"
+                android:drawableStart="@drawable/ic_transfer_24"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:text="Chuyển khoản VietinBank"
+                android:textColor="@color/dark_icon"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/rbProfileMomo"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:buttonTint="@color/shop_dynamic_red"
+                android:drawableStart="@drawable/ic_cash_24"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:text="Chuyển khoản MoMo"
+                android:textColor="@color/dark_icon"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </RadioGroup>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

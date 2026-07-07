@@ -1,0 +1,114 @@
+[
+  {
+    "id": 1,
+    "clubCode": "CAHN",
+    "clubName": "Công An Hà Nội",
+    "stadiumName": "Sân vận động Hàng Đẫy",
+    "city": "Hà Nội",
+    "address": "Đường Trịnh Hoài Đức, Cát Linh, Đống Đa, Hà Nội"
+  },
+  {
+    "id": 2,
+    "clubCode": "The Cong",
+    "clubName": "Thể Công - Viettel",
+    "stadiumName": "Sân vận động Hàng Đẫy",
+    "city": "Hà Nội",
+    "address": "Đường Trịnh Hoài Đức, Cát Linh, Đống Đa, Hà Nội"
+  },
+  {
+    "id": 3,
+    "clubCode": "Ninh Binh",
+    "clubName": "Ninh Bình FC",
+    "stadiumName": "Sân vận động Ninh Bình",
+    "city": "Ninh Bình",
+    "address": "Đường Huyền Trân Công Chúa, Đông Thành, TP. Ninh Bình"
+  },
+  {
+    "id": 4,
+    "clubCode": "Hanoi",
+    "clubName": "Hà Nội FC",
+    "stadiumName": "Sân vận động Hàng Đẫy",
+    "city": "Hà Nội",
+    "address": "Đường Trịnh Hoài Đức, Cát Linh, Đống Đa, Hà Nội"
+  },
+  {
+    "id": 5,
+    "clubCode": "CAHCMC",
+    "clubName": "Công An TP. Hồ Chí Minh",
+    "stadiumName": "Sân vận động Thống Nhất",
+    "city": "TP. Hồ Chí Minh",
+    "address": "Số 138 Đào Duy Từ, Phường 6, Quận 10, TP. Hồ Chí Minh"
+  },
+  {
+    "id": 6,
+    "clubCode": "Thep Xanh Nam Dinh",
+    "clubName": "Thép Xanh Nam Định",
+    "stadiumName": "Sân vận động Thiên Trường",
+    "city": "Nam Định",
+    "address": "Đường Đặng Xuân Bảng, Vị Hoàng, TP. Nam Định"
+  },
+  {
+    "id": 7,
+    "clubCode": "Hai Phong",
+    "clubName": "Hải Phòng FC",
+    "stadiumName": "Sân vận động Lạch Tray",
+    "city": "Hải Phòng",
+    "address": "Đường Lạch Tray, Ngô Quyền, Hải Phòng"
+  },
+  {
+    "id": 8,
+    "clubCode": "Hong Linh Ha Tinh",
+    "clubName": "Hồng Lĩnh Hà Tĩnh",
+    "stadiumName": "Sân vận động Hà Tĩnh",
+    "city": "Hà Tĩnh",
+    "address": "Đường Hàm Nghi, Phường Hà Huy Tập, TP. Hà Tĩnh"
+  },
+  {
+    "id": 9,
+    "clubCode": "Thanh Hoa",
+    "clubName": "Đông Á Thanh Hóa",
+    "stadiumName": "Sân vận động Thanh Hóa",
+    "city": "Thanh Hóa",
+    "address": "Đường Lê Lai, Phường Đông Sơn, TP. Thanh Hóa"
+  },
+  {
+    "id": 10,
+    "clubCode": "Song Lam Nghe An",
+    "clubName": "Sông Lam Nghệ An",
+    "stadiumName": "Sân vận động Vinh",
+    "city": "Nghệ An",
+    "address": "Số 6 đường Đào Tấn, Phường Cửa Nam, TP. Vinh, Nghệ An"
+  },
+  {
+    "id": 11,
+    "clubCode": "Hoang Anh Gia Lai",
+    "clubName": "Hoàng Anh Gia Lai",
+    "stadiumName": "Sân vận động Pleiku",
+    "city": "Gia Lai",
+    "address": "Đường Quang Trung, Phường Tây Sơn, TP. Pleiku, Gia Lai"
+  },
+  {
+    "id": 12,
+    "clubCode": "Becamex Binh Duong",
+    "clubName": "Becamex TP. Hồ Chí Minh",
+    "stadiumName": "Sân vận động Gò Đậu",
+    "city": "Bình Dương",
+    "address": "Đường 30 Tháng 4, TP. Thủ Dầu Một, Bình Dương"
+  },
+  {
+    "id": 13,
+    "clubCode": "SHB-Da Nang",
+    "clubName": "SHB Đà Nẵng",
+    "stadiumName": "Sân vận động Hòa Xuân",
+    "city": "Đà Nẵng",
+    "address": "Quận Cẩm Lệ, TP. Đà Nẵng"
+  },
+  {
+    "id": 14,
+    "clubCode": "PVF-CAND",
+    "clubName": "PVF-CAND FC",
+    "stadiumName": "Sân vận động PVF",
+    "city": "Hưng Yên",
+    "address": "Thôn Sở Đông, xã Long Hưng, huyện Văn Giang, Hưng Yên"
+  }
+]

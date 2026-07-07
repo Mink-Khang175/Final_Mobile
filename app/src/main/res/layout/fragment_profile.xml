@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_home_premium_screen">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingBottom="180dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="28dp">
+
+            <include
+                android:id="@+id/appHeader"
+                layout="@layout/component_app_header" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutIdentity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/bg_profile_identity_card"
+                android:elevation="0dp"
+                android:minHeight="122dp"
+                android:paddingHorizontal="22dp"
+                android:paddingVertical="18dp">
+
+                <ImageView
+                    android:id="@+id/imgAvatar"
+                    android:layout_width="88dp"
+                    android:layout_height="88dp"
+                    android:background="@drawable/bg_profile_logo_frame"
+                    android:padding="8dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/user"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvUserNameClub"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/stadium_ink"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/imgAvatar"
+                    app:layout_constraintTop_toTopOf="@id/imgAvatar" />
+
+                <LinearLayout
+                    android:id="@+id/layoutStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/imgAvatar"
+                    app:layout_constraintTop_toBottomOf="@id/tvUserNameClub">
+
+                    <TextView
+                        android:id="@+id/tvMembershipTier"
+                        android:layout_width="wrap_content"
+                        android:layout_height="28dp"
+                        android:background="@drawable/bg_profile_tier_pill"
+                        android:gravity="center"
+                        android:paddingHorizontal="12dp"
+                        android:textColor="@color/dark_icon"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvJoinedYear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/slate_caption"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cardPoints"
+                android:layout_width="match_parent"
+                android:layout_height="104dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/bg_profile_loyalty_clean"
+                android:elevation="0dp"
+                android:paddingHorizontal="20dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imgPointsIcon"
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
+                    android:background="@drawable/bg_history_icon_points"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_trophy_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/premium_gold" />
+
+                <TextView
+                    android:id="@+id/tvBalanceLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="ĐIỂM THÀNH VIÊN"
+                    android:textColor="@color/slate_caption"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/tvPointsBalance"
+                    app:layout_constraintEnd_toStartOf="@id/btnRedeem"
+                    app:layout_constraintStart_toEndOf="@id/imgPointsIcon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/tvPointsBalance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/red_energy"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/btnRedeem"
+                    app:layout_constraintStart_toStartOf="@id/tvBalanceLabel"
+                    app:layout_constraintTop_toBottomOf="@id/tvBalanceLabel" />
+
+                <TextView
+                    android:id="@+id/btnRedeem"
+                    android:layout_width="118dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_shop_chip_selected"
+                    android:gravity="center"
+                    android:text="TÍCH ĐIỂM"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutClubHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="24dp">
+
+                <View
+                    android:id="@+id/indicatorClub"
+                    android:layout_width="4dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/bg_home_section_indicator"
+                    app:layout_constraintBottom_toBottomOf="@id/tvMyClubTitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvMyClubTitle" />
+
+                <TextView
+                    android:id="@+id/tvMyClubTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:includeFontPadding="false"
+                    android:letterSpacing="0"
+                    android:text="CLB của tôi"
+                    android:textColor="@color/stadium_ink"
+                    android:textSize="23sp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintBottom_toBottomOf="@id/btnChangeClub"
+                    app:layout_constraintEnd_toStartOf="@id/btnChangeClub"
+                    app:layout_constraintStart_toEndOf="@id/indicatorClub"
+                    app:layout_constraintTop_toTopOf="@id/btnChangeClub" />
+
+                <TextView
+                    android:id="@+id/btnChangeClub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:background="@drawable/bg_profile_change_club_dark"
+                    android:gravity="center"
+                    android:paddingHorizontal="12dp"
+                    android:text="ĐỔI CLB"
+                    android:textColor="@color/red_energy"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardClub"
+                android:layout_width="match_parent"
+                android:layout_height="132dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="12dp"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imgClubBackground"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/svd" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_profile_club_overlay" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="18dp">
+
+                        <ImageView
+                            android:id="@+id/imgClubLogo"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:background="@drawable/bg_profile_logo_frame"
+                            android:padding="6dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ic_logo"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvClubName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@id/layoutStadium"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/imgClubLogo"
+                            app:layout_constraintTop_toTopOf="@id/imgClubLogo"
+                            app:layout_constraintVertical_chainStyle="packed" />
+
+                        <LinearLayout
+                            android:id="@+id/layoutStadium"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:layout_marginTop="6dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            app:layout_constraintBottom_toBottomOf="@id/imgClubLogo"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/imgClubLogo"
+                            app:layout_constraintTop_toBottomOf="@id/tvClubName">
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_location_24"
+                                app:tint="@color/white_alpha_80" />
+
+                            <TextView
+                                android:id="@+id/tvStadiumName"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:layout_weight="1"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:textColor="@color/white_alpha_80"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </FrameLayout>
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="26dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="4dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/bg_home_section_indicator" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-condensed"
+                    android:includeFontPadding="false"
+                    android:letterSpacing="0"
+                    android:text="Hoạt động của tôi"
+                    android:textColor="@color/stadium_ink"
+                    android:textSize="23sp"
+                    android:textStyle="bold|italic" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <LinearLayout
+                    android:id="@+id/cardTickets"
+                    style="@style/ProfileActivityCard"
+                    android:layout_width="0dp"
+                    android:elevation="0dp"
+                    android:layout_marginEnd="7dp"
+                    android:layout_weight="1">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        style="@style/ProfileActivityIcon"
+                        android:src="@drawable/ic_ticket_24"
+                        app:tint="@color/red_energy" />
+
+                    <TextView
+                        style="@style/ProfileActivityTitle"
+                        android:text="VÉ CỦA TÔI" />
+
+                    <TextView
+                        android:id="@+id/tvActiveTickets"
+                        style="@style/ProfileActivitySubtitle" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardOrders"
+                    style="@style/ProfileActivityCard"
+                    android:layout_width="0dp"
+                    android:elevation="0dp"
+                    android:layout_marginHorizontal="3dp"
+                    android:layout_weight="1">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        style="@style/ProfileActivityIcon"
+                        android:src="@drawable/ic_bag_24"
+                        app:tint="@color/red_energy" />
+
+                    <TextView
+                        style="@style/ProfileActivityTitle"
+                        android:text="ĐƠN HÀNG" />
+
+                    <TextView
+                        android:id="@+id/tvOrderStatus"
+                        style="@style/ProfileActivitySubtitle" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardPrediction"
+                    style="@style/ProfileActivityCard"
+                    android:layout_width="0dp"
+                    android:elevation="0dp"
+                    android:layout_marginStart="7dp"
+                    android:layout_weight="1">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        style="@style/ProfileActivityIcon"
+                        android:src="@drawable/ic_trend_24"
+                        app:tint="@color/red_energy" />
+
+                    <TextView
+                        style="@style/ProfileActivityTitle"
+                        android:text="DỰ ĐOÁN" />
+
+                    <TextView
+                        android:id="@+id/tvPredictionAccuracy"
+                        style="@style/ProfileActivitySubtitle" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="18dp"
+                android:baselineAligned="false"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/cardFanZone"
+                    style="@style/ProfileSectionCard"
+                    android:layout_width="match_parent"
+                    android:elevation="0dp"
+                    android:layout_marginHorizontal="0dp"
+                    android:layout_marginEnd="0dp">
+
+                    <TextView
+                        style="@style/ProfileSectionTitle"
+                        android:text="Khu cổ động"
+                        android:textSize="16sp" />
+
+                    <include
+                        android:id="@+id/rowLoyaltyRewards"
+                        layout="@layout/item_profile_row" />
+
+                    <include
+                        android:id="@+id/rowMyBadges"
+                        layout="@layout/item_profile_row" />
+
+                    <include
+                        android:id="@+id/rowVouchers"
+                        layout="@layout/item_profile_row" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardAccount"
+                    style="@style/ProfileSectionCard"
+                    android:layout_width="match_parent"
+                    android:elevation="0dp"
+                    android:layout_marginHorizontal="0dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="12dp">
+
+                    <TextView
+                        style="@style/ProfileSectionTitle"
+                        android:text="Hỗ trợ tài khoản"
+                        android:textSize="16sp" />
+
+                    <include
+                        android:id="@+id/rowPersonalInfo"
+                        layout="@layout/item_profile_row" />
+
+                    <include
+                        android:id="@+id/rowSecurityPrivacy"
+                        layout="@layout/item_profile_row" />
+
+                    <include
+                        android:id="@+id/rowNotifications"
+                        layout="@layout/item_profile_row" />
+
+                    <include
+                        android:id="@+id/rowHelpCenter"
+                        layout="@layout/item_profile_row" />
+
+                    <include
+                        android:id="@+id/rowAdminDashboard"
+                        layout="@layout/item_profile_row" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/btnLogout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_profile_logout"
+                android:gravity="center"
+                android:text="ĐĂNG XUẤT"
+                android:textColor="@color/primary_red"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvVersion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:textColor="@color/slate_caption"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/bottomNav"
+        layout="@layout/component_bottom_nav_profile" />
+</FrameLayout>
+

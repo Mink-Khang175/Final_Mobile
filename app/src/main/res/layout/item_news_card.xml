@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardNewsItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/premium_card"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="false">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_news_card"
+        android:minHeight="118dp"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/imgNewsThumb"
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:background="@drawable/bg_home_news_thumb"
+            android:scaleType="centerCrop"
+            android:src="@drawable/svd"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvNewsCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="TIN V.LEAGUE"
+            android:textColor="@color/red_energy"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/btnBookmark"
+            app:layout_constraintStart_toStartOf="@id/tvNewsTitle"
+            app:layout_constraintTop_toTopOf="@id/imgNewsThumb" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnBookmark"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="6dp"
+            android:src="@drawable/ic_bookmark_24"
+            app:tint="@color/slate_caption"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/imgNewsThumb" />
+
+        <TextView
+            android:id="@+id/tvNewsTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="1dp"
+            android:maxLines="2"
+            android:text="Tiêu đề tin tức V.League nổi bật"
+            android:textColor="@color/stadium_ink"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgNewsThumb"
+            app:layout_constraintTop_toBottomOf="@id/tvNewsCategory" />
+
+        <TextView
+            android:id="@+id/tvNewsExcerpt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="1dp"
+            android:maxLines="1"
+            android:text="Tóm tắt ngắn giúp người dùng đọc tin nhanh hơn."
+            android:textColor="@color/dark_gray_text"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvNewsTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvNewsTitle" />
+
+        <TextView
+            android:id="@+id/tvNewsMeta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="VPF - 18/06/2026"
+            android:textColor="@color/dark_gray_alpha_60"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvNewsTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvNewsExcerpt" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
+

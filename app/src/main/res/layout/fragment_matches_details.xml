@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen_field">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingBottom="190dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/scoreHeaderBackdrop"
+                android:layout_width="match_parent"
+                android:layout_height="256dp"
+                android:background="@drawable/bg_match_detail_scoreboard_backdrop">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="86dp"
+                    android:paddingHorizontal="20dp"
+                    android:paddingTop="16dp">
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/btnBack"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_header_action"
+                        android:contentDescription="Back"
+                        android:padding="11dp"
+                        android:src="@drawable/ic_arrow_left_24"
+                        app:tint="@color/stadium_ink"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvHeaderTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+            android:text="Trung tâm trận đấu"
+                        android:textColor="@color/stadium_ink"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/btnShare"
+                        app:layout_constraintStart_toEndOf="@id/btnBack"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/btnShare"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:contentDescription="Share"
+                        android:padding="9dp"
+                        android:background="@drawable/bg_header_action"
+                        android:src="@drawable/ic_share_24"
+                        app:tint="@color/stadium_ink"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardScoreSummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="176dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginHorizontal="16dp"
+                    app:cardBackgroundColor="@color/premium_card"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="7dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingHorizontal="18dp"
+                        android:paddingTop="14dp"
+                        android:paddingBottom="16dp">
+
+                        <TextView
+                            android:id="@+id/tvTournament"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:textColor="@color/dark_icon"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvVenueDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:textColor="@color/dark_gray_text"
+                            android:textSize="12sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvTournament" />
+
+                        <ImageView
+                            android:id="@+id/imgHomeLogo"
+                            android:layout_width="54dp"
+                            android:layout_height="54dp"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/bg_home_story_ring"
+                            android:contentDescription="@string/club_logo"
+                            android:padding="8dp"
+                            app:layout_constraintEnd_toStartOf="@id/tvScore"
+                            app:layout_constraintHorizontal_chainStyle="spread_inside"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvVenueDate" />
+
+                        <TextView
+                            android:id="@+id/tvScore"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="18dp"
+                            android:includeFontPadding="false"
+                            android:textColor="@color/dark_icon"
+                            android:textSize="34sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="@id/imgHomeLogo"
+                            app:layout_constraintEnd_toStartOf="@id/imgAwayLogo"
+                            app:layout_constraintStart_toEndOf="@id/imgHomeLogo"
+                            app:layout_constraintTop_toTopOf="@id/imgHomeLogo" />
+
+                        <ImageView
+                            android:id="@+id/imgAwayLogo"
+                            android:layout_width="54dp"
+                            android:layout_height="54dp"
+                            android:background="@drawable/bg_home_story_ring"
+                            android:contentDescription="@string/club_logo"
+                            android:padding="8dp"
+                            app:layout_constraintBottom_toBottomOf="@id/imgHomeLogo"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/tvScore"
+                            app:layout_constraintTop_toTopOf="@id/imgHomeLogo" />
+
+                        <TextView
+                            android:id="@+id/tvHomeName"
+                            android:layout_width="104dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:maxLines="2"
+                            android:textColor="@color/dark_icon"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="@id/imgHomeLogo"
+                            app:layout_constraintStart_toStartOf="@id/imgHomeLogo"
+                            app:layout_constraintTop_toBottomOf="@id/imgHomeLogo" />
+
+                        <TextView
+                            android:id="@+id/tvAwayName"
+                            android:layout_width="104dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:maxLines="2"
+                            android:textColor="@color/dark_icon"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="@id/imgAwayLogo"
+                            app:layout_constraintStart_toStartOf="@id/imgAwayLogo"
+                            app:layout_constraintTop_toBottomOf="@id/imgAwayLogo" />
+
+                        <TextView
+                            android:id="@+id/tvStatus"
+                            android:layout_width="86dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/bg_match_center_status_ended"
+                            android:gravity="center"
+                            android:paddingHorizontal="10dp"
+                            android:textColor="@color/white"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintEnd_toEndOf="@id/tvScore"
+                            app:layout_constraintStart_toStartOf="@id/tvScore"
+                            app:layout_constraintTop_toBottomOf="@id/tvScore" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+            </FrameLayout>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_segmented_tabs"
+                android:clipToPadding="false"
+                android:fillViewport="true"
+                android:paddingHorizontal="16dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:id="@+id/tabOverview"
+                        style="@style/MatchCenterTab"
+                        android:text="Tổng quan" />
+
+                    <TextView
+                        android:id="@+id/tabLineups"
+                        style="@style/MatchCenterTab"
+                        android:text="Đội hình" />
+
+                    <TextView
+                        android:id="@+id/tabStats"
+                        style="@style/MatchCenterTab"
+                        android:text="Thống kê" />
+
+                    <TextView
+                        android:id="@+id/tabTimeline"
+                        style="@style/MatchCenterTab"
+                        android:text="Diễn biến" />
+
+                    <TextView
+                        android:id="@+id/tabH2h"
+                        style="@style/MatchCenterTab"
+                        android:text="Điểm số" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <LinearLayout
+                android:id="@+id/contentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="18dp"
+                android:paddingBottom="40dp">
+
+                <LinearLayout
+                    android:id="@+id/llOverview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/MatchCenterSectionTitle"
+                    android:text="Thông tin trận đấu" />
+
+                    <LinearLayout
+                        android:id="@+id/llFacts"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_match_center_card"
+                        android:orientation="vertical"
+                        android:padding="16dp" />
+
+                    <TextView
+                        style="@style/MatchCenterSectionTitle"
+                        android:layout_marginTop="18dp"
+                    android:text="Diễn biến chính" />
+
+                    <LinearLayout
+                        android:id="@+id/llGoalTimeline"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_match_center_card"
+                        android:orientation="vertical"
+                        android:padding="16dp" />
+
+                    <TextView
+                        style="@style/MatchCenterSectionTitle"
+                        android:layout_marginTop="18dp"
+                    android:text="Thống kê trận đấu" />
+
+                    <LinearLayout
+                        android:id="@+id/llOverviewStats"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_match_center_card"
+                        android:orientation="vertical"
+                        android:padding="16dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llLineups"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/MatchCenterSectionTitle"
+                    android:text="Đội hình" />
+
+                    <LinearLayout
+                        android:id="@+id/llLineupCards"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llStats"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/MatchCenterSectionTitle"
+                    android:text="Thống kê chi tiết" />
+
+                    <LinearLayout
+                        android:id="@+id/llStatsRows"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_match_center_card"
+                        android:orientation="vertical"
+                        android:padding="16dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llTimeline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/MatchCenterSectionTitle"
+                    android:text="Diễn biến trận đấu" />
+
+                    <LinearLayout
+                        android:id="@+id/llTimelineOnlyRows"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_match_center_card"
+                        android:orientation="vertical"
+                        android:padding="16dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llH2h"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/MatchCenterSectionTitle"
+                    android:text="Cầu thủ nổi bật" />
+
+                    <LinearLayout
+                        android:id="@+id/llRatedPlayers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_match_center_card"
+                        android:orientation="vertical"
+                        android:padding="16dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/bottomNav"
+        layout="@layout/component_bottom_nav_matches" />
+</FrameLayout>
+

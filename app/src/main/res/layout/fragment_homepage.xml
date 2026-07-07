@@ -1,0 +1,1030 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_home_premium_screen">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/homeScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingBottom="180dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="30dp">
+
+            <include
+                android:id="@+id/appHeader"
+                layout="@layout/component_app_header" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/layoutWelcome"
+                android:layout_width="match_parent"
+                android:layout_height="224dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="1dp"
+                app:strokeColor="@color/white_alpha_40"
+                app:strokeWidth="0dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextureView
+                        android:id="@+id/videoWelcomeBackground"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_home_hero_greeting_scrim" />
+
+                    <View
+                        android:layout_width="88dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="start"
+                        android:background="@drawable/bg_home_hero_red_blade_start"
+                        android:rotation="-10" />
+
+                    <View
+                        android:layout_width="82dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        android:background="@drawable/bg_home_hero_red_blade_end"
+                        android:rotation="10" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical|start"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginEnd="24dp"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:padding="0dp">
+
+                        <TextView
+                            android:id="@+id/tvWelcomeTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:textColor="@color/white_alpha_85"
+                            android:textSize="17sp"
+                            android:textStyle="italic"
+                            tools:text="Chào mừng trở lại," />
+
+                        <TextView
+                            android:id="@+id/tvWelcomeName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:ellipsize="end"
+                            android:fontFamily="sans-serif-condensed"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:textColor="@color/white"
+                            android:textSize="34sp"
+                            android:textStyle="bold|italic"
+                            tools:text="Ho Minh Khang" />
+
+                        <View
+                            android:layout_width="46dp"
+                            android:layout_height="6dp"
+                            android:layout_marginTop="13dp"
+                            android:background="@drawable/bg_home_hero_name_underline" />
+
+                        <TextView
+                            android:id="@+id/tvWelcomeSubtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="18dp"
+                            android:lineSpacingExtra="3dp"
+                            android:maxLines="2"
+                            android:textColor="@color/white_alpha_85"
+                            android:textSize="17sp"
+                            android:textStyle="italic"
+                            android:visibility="visible"
+                            tools:text="Theo dõi đội bóng, lịch đấu, vé và tin mới trong ngày." />
+                    </LinearLayout>
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:id="@+id/layoutQuickActions"
+                android:layout_width="match_parent"
+                android:layout_height="86dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="18dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:weightSum="4">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/actionStandings"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@color/transparent"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="1dp"
+                    app:rippleColor="@color/shop_dynamic_red_soft"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_home_action_card_premium"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="6dp"
+                        android:paddingVertical="7dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:background="@drawable/bg_home_action_icon"
+                            android:contentDescription="@string/standings_tab"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_nav_table"
+                             app:tint="@color/primary_red" />
+
+                        <TextView
+                            android:id="@+id/tvActionStandings"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="7dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:maxLines="1"
+                             android:textColor="@color/stadium_ink"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            tools:text="BXH" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/actionFixtures"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@color/transparent"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="1dp"
+                    app:rippleColor="@color/shop_dynamic_red_soft"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_home_action_card_premium"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="6dp"
+                        android:paddingVertical="7dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:background="@drawable/bg_home_action_icon"
+                            android:contentDescription="@string/fixtures_tab"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_nav_matches"
+                             app:tint="@color/primary_red" />
+
+                        <TextView
+                            android:id="@+id/tvActionFixtures"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="7dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:maxLines="1"
+                             android:textColor="@color/stadium_ink"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            tools:text="Lịch đấu" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/actionShop"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@color/transparent"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="1dp"
+                    app:rippleColor="@color/shop_dynamic_red_soft"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_home_action_card_premium"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="6dp"
+                        android:paddingVertical="7dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:background="@drawable/bg_home_action_icon"
+                            android:contentDescription="@string/shop_tab"
+                            android:padding="8dp"
+                            android:src="@drawable/storefront_24"
+                             app:tint="@color/primary_red" />
+
+                        <TextView
+                            android:id="@+id/tvActionShop"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="7dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:maxLines="1"
+                             android:textColor="@color/stadium_ink"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            tools:text="Shop" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/actionFanZone"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@color/transparent"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="1dp"
+                    app:rippleColor="@color/shop_dynamic_red_soft"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_home_action_card_premium"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="6dp"
+                        android:paddingVertical="7dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:background="@drawable/bg_home_action_icon"
+                            android:contentDescription="@string/news_tab"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_nav_fan"
+                             app:tint="@color/primary_red" />
+
+                        <TextView
+                            android:id="@+id/tvActionFanZone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="7dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:maxLines="1"
+                             android:textColor="@color/stadium_ink"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            tools:text="Fan Zone" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutLiveHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="24dp">
+
+                <View
+                    android:id="@+id/liveSectionIndicator"
+                    android:layout_width="4dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/bg_home_section_indicator"
+                    app:layout_constraintBottom_toBottomOf="@id/tvLiveMatchTitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvLiveMatchTitle" />
+
+                <TextView
+                    android:id="@+id/tvLiveMatchTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:includeFontPadding="false"
+                    android:fontFamily="sans-serif-condensed"
+                    android:letterSpacing="0"
+                    android:textColor="@color/stadium_ink"
+                    android:textSize="25sp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintBottom_toBottomOf="@id/tvLiveMatchViewAll"
+                    app:layout_constraintEnd_toStartOf="@id/tvLiveMatchViewAll"
+                    app:layout_constraintStart_toEndOf="@id/liveSectionIndicator"
+                    app:layout_constraintTop_toTopOf="@id/tvLiveMatchViewAll"
+                    tools:text="Kết quả nổi bật" />
+
+                <TextView
+                    android:id="@+id/tvLiveMatchViewAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:gravity="center"
+                    android:textColor="@color/shop_dynamic_red"
+                    android:textSize="15sp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Xem tất cả" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardLiveMatch"
+                android:layout_width="match_parent"
+                android:layout_height="282dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/premium_card"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:rippleColor="@color/shop_dynamic_red_soft"
+                app:strokeColor="@color/sports_outline"
+                app:strokeWidth="1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_home_match_card_premium"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/tvMatchTournamentInfo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/dark_gray_text"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/tvMatchStatus"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="V.League Playoff - Final" />
+
+                    <TextView
+                        android:id="@+id/tvMatchStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="28dp"
+                        android:background="@drawable/bg_live_badge"
+                        android:gravity="center"
+                        android:paddingHorizontal="10dp"
+                        android:textColor="@color/stadium_ink"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="FT" />
+
+                    <TextView
+                        android:id="@+id/tvMatchVenueStatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/sports_medium_gray"
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvMatchTournamentInfo"
+                        tools:text="PVF Stadium - 12/06/2026" />
+
+                    <LinearLayout
+                        android:id="@+id/layoutMatchScoreboard"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:baselineAligned="false"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="3"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvMatchVenueStatus">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/imgHomeTeamLogo"
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                android:background="@drawable/bg_home_story_ring"
+                                android:contentDescription="@string/club_logo_desc"
+                                android:padding="8dp"
+                                android:scaleType="centerInside"
+                                tools:src="@drawable/ic_logo" />
+
+                            <TextView
+                                android:id="@+id/tvHomeTeamName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="7dp"
+                                android:ellipsize="end"
+                                android:gravity="center"
+                                android:includeFontPadding="false"
+                                android:maxLines="1"
+                                android:textColor="@color/stadium_ink"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                tools:text="PVF-CAND" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvScoreBlock"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:includeFontPadding="false"
+                                android:textColor="@color/stadium_ink"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                tools:text="FT" />
+
+                            <TextView
+                                android:id="@+id/tvMatchScore"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:gravity="center"
+                                android:includeFontPadding="false"
+                                android:textColor="@color/stadium_ink"
+                                android:textSize="38sp"
+                                android:textStyle="bold"
+                                tools:text="1 - 1" />
+
+                            <TextView
+                                android:id="@+id/tvPenaltyScore"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:includeFontPadding="false"
+                                android:textColor="@color/dark_gray_text"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                tools:text="PEN 4 - 5"
+                                tools:visibility="visible" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/imgAwayTeamLogo"
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                android:background="@drawable/bg_home_story_ring"
+                                android:contentDescription="@string/club_logo_desc"
+                                android:padding="8dp"
+                                android:scaleType="centerInside"
+                                tools:src="@drawable/ic_logo" />
+
+                            <TextView
+                                android:id="@+id/tvAwayTeamName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="7dp"
+                                android:ellipsize="end"
+                                android:gravity="center"
+                                android:includeFontPadding="false"
+                                android:maxLines="1"
+                                android:textColor="@color/stadium_ink"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                tools:text="Bac Ninh" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvGoalScorers"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="start"
+                        android:lineSpacingExtra="4dp"
+                        android:maxLines="2"
+                        android:textColor="@color/sports_medium_gray"
+                        android:textSize="11sp"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/layoutMatchScoreboard"
+                        tools:text="55' Chủ nhà - Hoang Vu Samson\n33' Đội khách - Bruno Cantanhede" />
+
+                    <LinearLayout
+                        android:id="@+id/layoutGoalColumns"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="top"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/layoutMatchScoreboard">
+
+                        <TextView
+                            android:id="@+id/tvHomeGoalScorers"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:gravity="end"
+                            android:lineSpacingExtra="4dp"
+                            android:maxLines="3"
+                            android:textColor="@color/sports_medium_gray"
+                            android:textSize="11sp"
+                            tools:text="55'  H. V. Samson" />
+
+                        <TextView
+                            android:id="@+id/tvAwayGoalScorers"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:gravity="start"
+                            android:lineSpacingExtra="4dp"
+                            android:maxLines="3"
+                            android:textColor="@color/sports_medium_gray"
+                            android:textSize="11sp"
+                            tools:text="33'  B. Cantanhede" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvMatchHubHint"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_home_outline_red_button"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:text="Xem Match Center" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutFixturesHeader"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="30dp">
+
+                <View
+                    android:id="@+id/fixturesSectionIndicator"
+                    android:layout_width="4dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/bg_home_section_indicator"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvUpcomingFixturesTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:includeFontPadding="false"
+                    android:fontFamily="sans-serif-condensed"
+                    android:letterSpacing="0.04"
+                    android:textColor="@color/stadium_ink"
+                    android:textSize="25sp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/tvFixturesViewAll"
+                    app:layout_constraintStart_toEndOf="@id/fixturesSectionIndicator"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Lịch sắp tới" />
+
+                <TextView
+                    android:id="@+id/tvFixturesViewAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:gravity="center"
+                    android:textColor="@color/shop_dynamic_red"
+                    android:textSize="15sp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Xem lịch" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvUpcomingFixtures"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:paddingStart="16dp"
+                android:paddingEnd="10dp"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_home_fixture" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardSeasonPass"
+                android:layout_width="match_parent"
+                android:layout_height="214dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="28dp"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="6dp"
+                app:strokeColor="@color/white_alpha_40"
+                app:strokeWidth="1dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imgSeasonPassBackground"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        tools:src="@drawable/svd" />
+
+                    <VideoView
+                        android:id="@+id/videoSeasonPassBackground"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_home_banner_scrim" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingHorizontal="18dp"
+                        android:paddingVertical="18dp">
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/seasonPassStartGuide"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_begin="0dp" />
+
+                        <TextView
+                            android:id="@+id/tvSeasonPassLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_shop_orange_pill"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="5dp"
+                            android:textColor="@color/white"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="@id/tvSeasonCountdown"
+                            app:layout_constraintStart_toStartOf="@id/seasonPassStartGuide"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="2026/2027 EARLY BIRD" />
+
+                        <TextView
+                            android:id="@+id/tvSeasonCountdown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/black_alpha_25"
+                            android:paddingHorizontal="9dp"
+                            android:paddingVertical="5dp"
+                            android:textColor="@color/white"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="Còn: 04 ngày 12 giờ" />
+
+                        <TextView
+                            android:id="@+id/tvSeasonPassTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:includeFontPadding="false"
+                            android:textColor="@color/white"
+                            android:textSize="24sp"
+                            android:textStyle="bold|italic"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@id/seasonPassStartGuide"
+                            app:layout_constraintTop_toBottomOf="@id/tvSeasonPassLabel"
+                            tools:text="V-LEAGUE SEASON PASS" />
+
+                        <TextView
+                            android:id="@+id/tvSeasonPassDesc"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:lineSpacingExtra="2dp"
+                            android:maxLines="2"
+                            android:textColor="@color/white_alpha_85"
+                            android:textSize="13sp"
+                            app:layout_constraintBottom_toTopOf="@id/btnPreOrder"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@id/seasonPassStartGuide"
+                            app:layout_constraintTop_toBottomOf="@id/tvSeasonPassTitle"
+                            app:layout_constraintVertical_bias="0"
+                            tools:text="Giữ ghế yêu thích cho mùa giải mới cùng quyền lợi riêng cho fan." />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPreOrder"
+                            android:layout_width="158dp"
+                            android:layout_height="44dp"
+                            android:textColor="@color/white"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/bg_home_outline_red_button"
+                            app:backgroundTint="@null"
+                            app:cornerRadius="12dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@id/seasonPassStartGuide"
+                            tools:text="Đặt trước" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutNewsHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="30dp">
+
+                <View
+                    android:id="@+id/newsSectionIndicator"
+                    android:layout_width="4dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/bg_home_section_indicator"
+                    app:layout_constraintBottom_toBottomOf="@id/tvInsidePitch"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvInsidePitch" />
+
+                <TextView
+                    android:id="@+id/tvInsidePitch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:includeFontPadding="false"
+                    android:fontFamily="sans-serif-condensed"
+                    android:letterSpacing="0.04"
+                    android:textColor="@color/stadium_ink"
+                    android:textSize="25sp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintBottom_toBottomOf="@id/tvNewsViewAll"
+                    app:layout_constraintEnd_toStartOf="@id/tvNewsViewAll"
+                    app:layout_constraintStart_toEndOf="@id/newsSectionIndicator"
+                    app:layout_constraintTop_toTopOf="@id/tvNewsViewAll"
+                    tools:text="Tin mới VPF" />
+
+                <TextView
+                    android:id="@+id/tvNewsViewAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:gravity="center"
+                    android:textColor="@color/shop_dynamic_red"
+                    android:textSize="15sp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Xem tất cả" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvNews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:paddingStart="16dp"
+                android:paddingEnd="10dp"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_home_news" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/layoutBottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="14dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_home_bottom_nav"
+        android:elevation="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="7dp"
+        android:weightSum="5">
+
+        <LinearLayout
+            android:id="@+id/navHome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="@drawable/bg_home_nav_selected_premium"
+                android:contentDescription="@string/home_tab"
+                android:padding="3dp"
+                android:src="@drawable/ic_nav_home"
+                app:tint="@color/red_energy" />
+
+            <TextView
+                android:id="@+id/tvNavHomeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/nav_home"
+                android:textColor="@color/red_energy"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                tools:text="Home" />
+
+            <View
+                android:layout_width="18dp"
+            android:layout_height="3dp"
+                android:layout_marginTop="2dp"
+            android:background="@drawable/bg_nav_active_dot" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navMatches"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:contentDescription="@string/matches_tab"
+                android:padding="3dp"
+                android:src="@drawable/ic_nav_matches"
+                app:tint="@color/dark_gray_text" />
+
+            <TextView
+                android:id="@+id/tvNavMatchesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="@string/nav_matches"
+                android:textColor="@color/dark_gray_text"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                tools:text="Matches" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navShop"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:contentDescription="@string/shop_tab"
+                android:padding="3dp"
+                android:src="@drawable/storefront_24"
+                app:tint="@color/dark_gray_text" />
+
+            <TextView
+                android:id="@+id/tvNavShopLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="@string/nav_shop"
+                android:textColor="@color/dark_gray_text"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                tools:text="Shop" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navNews"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:contentDescription="@string/news_tab"
+                android:padding="3dp"
+                android:src="@drawable/ic_nav_news"
+                app:tint="@color/dark_gray_text" />
+
+            <TextView
+                android:id="@+id/tvNavNewsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="@string/nav_news"
+                android:textColor="@color/dark_gray_text"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                tools:text="News" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navProfile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:contentDescription="@string/profile_tab"
+                android:padding="3dp"
+                android:src="@drawable/ic_nav_profile"
+                app:tint="@color/dark_gray_text" />
+
+            <TextView
+                android:id="@+id/tvNavProfileLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="@string/nav_profile"
+                android:textColor="@color/dark_gray_text"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                tools:text="Profile" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
+
