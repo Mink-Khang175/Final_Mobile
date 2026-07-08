@@ -6,17 +6,22 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.finalproject.v_league_ticket.R;
+import com.finalproject.v_league_ticket.databinding.DialogResetPasswordBinding;
 import com.finalproject.v_league_ticket.databinding.FragmentAuthLoginBinding;
 import com.finalproject.v_league_ticket.presentation.admin.AdminDashboardFragment;
 import com.finalproject.v_league_ticket.presentation.homepage.HomepageFragment;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,7 +47,7 @@ public class AuthLoginFragment extends Fragment {
         bindToggleText();
         binding.btnLogin.setOnClickListener(v -> submitLogin());
         binding.tvGoRegister.setOnClickListener(v -> navigateTo(new AuthRegisterFragment()));
-        binding.tvForgotPassword.setOnClickListener(v -> toast("Tính năng khôi phục mật khẩu sẽ sớm được hỗ trợ."));
+        binding.tvForgotPassword.setOnClickListener(v -> showResetPasswordDialog());
         binding.btnGoogle.setOnClickListener(v -> toast("Đăng nhập bằng Google sẽ sớm được hỗ trợ."));
         binding.btnFacebook.setOnClickListener(v -> toast("Đăng nhập bằng Facebook sẽ sớm được hỗ trợ."));
     }
@@ -105,6 +110,83 @@ public class AuthLoginFragment extends Fragment {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     loadRoleThenNavigate(user);
                 });
+    }
+
+    private void showResetPasswordDialog() {
+        DialogResetPasswordBinding dialogBinding = DialogResetPasswordBinding.inflate(getLayoutInflater());
+        String currentEmail = text(binding.edtEmail.getText());
+        if (currentEmail.contains("@")) {
+            dialogBinding.edtResetEmail.setText(currentEmail);
+            dialogBinding.edtResetEmail.setSelection(currentEmail.length());
+        }
+        AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext())
+                .setView(dialogBinding.getRoot())
+                .create();
+        dialogBinding.btnCancelReset.setOnClickListener(v -> dialog.dismiss());
+        dialogBinding.btnSendResetEmail.setOnClickListener(v -> sendPasswordReset(dialogBinding, dialog));
+        dialog.setOnShowListener(v -> {
+            if (dialog.getWindow() != null) {
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            }
+        });
+        dialog.show();
+    }
+
+    private void sendPasswordReset(DialogResetPasswordBinding dialogBinding, AlertDialog dialog) {
+        dialogBinding.tilResetEmail.setError(null);
+        String email = text(dialogBinding.edtResetEmail.getText());
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            dialogBinding.tilResetEmail.setError("Nhập email hợp lệ");
+            return;
+        }
+        dialogBinding.btnSendResetEmail.setEnabled(false);
+        dialogBinding.btnCancelReset.setEnabled(false);
+        dialogBinding.btnSendResetEmail.setText("ĐANG GỬI...");
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.setLanguageCode("vi");
+        auth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(task -> {
+                    if (binding == null) return;
+                    dialogBinding.btnSendResetEmail.setEnabled(true);
+                    dialogBinding.btnCancelReset.setEnabled(true);
+                    dialogBinding.btnSendResetEmail.setText("GỬI LIÊN KẾT");
+                    if (task.isSuccessful()) {
+                        dialog.dismiss();
+                        binding.edtEmail.setText(email);
+                        showResetSentDialog(email);
+                        return;
+                    }
+                    String message = resetPasswordErrorMessage(task.getException());
+                    dialogBinding.tilResetEmail.setError(message);
+                    toast(message);
+                });
+    }
+
+    private void showResetSentDialog(String email) {
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Kiểm tra email")
+                .setMessage("Nếu " + email + " là tài khoản đã đăng ký, Firebase sẽ gửi liên kết đặt lại mật khẩu. Hãy kiểm tra cả mục Spam/Quảng cáo.")
+                .setPositiveButton("ĐÃ HIỂU", null)
+                .show();
+    }
+
+    private String resetPasswordErrorMessage(Exception exception) {
+        if (exception instanceof FirebaseAuthException) {
+            String code = ((FirebaseAuthException) exception).getErrorCode();
+            switch (code) {
+                case "ERROR_USER_NOT_FOUND":
+                    return "Email này chưa có tài khoản trong Firebase Authentication.";
+                case "ERROR_INVALID_EMAIL":
+                    return "Email không hợp lệ.";
+                case "ERROR_TOO_MANY_REQUESTS":
+                    return "Bạn thử quá nhiều lần. Vui lòng chờ rồi thử lại.";
+                case "ERROR_NETWORK_REQUEST_FAILED":
+                    return "Không có kết nối mạng. Vui lòng thử lại.";
+                default:
+                    return "Firebase không gửi được email: " + code;
+            }
+        }
+        return "Không gửi được email khôi phục mật khẩu.";
     }
 
     private void loadRoleThenNavigate(FirebaseUser user) {
