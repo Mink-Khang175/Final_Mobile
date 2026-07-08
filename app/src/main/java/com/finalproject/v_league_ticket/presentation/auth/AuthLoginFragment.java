@@ -1,6 +1,5 @@
 package com.finalproject.v_league_ticket.presentation.auth;
 
-import android.net.Uri;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -28,6 +27,7 @@ import java.util.Map;
 
 public class AuthLoginFragment extends Fragment {
     private FragmentAuthLoginBinding binding;
+    private AuthHeroVideoController heroVideoController;
 
     public AuthLoginFragment() {
         super(R.layout.fragment_auth_login);
@@ -37,7 +37,8 @@ public class AuthLoginFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentAuthLoginBinding.bind(view);
-        setupHeroVideo();
+        heroVideoController = new AuthHeroVideoController(binding.videoAuthHero);
+        heroVideoController.prepare(requireContext());
         bindToggleText();
         binding.btnLogin.setOnClickListener(v -> submitLogin());
         binding.tvGoRegister.setOnClickListener(v -> navigateTo(new AuthRegisterFragment()));
@@ -48,58 +49,28 @@ public class AuthLoginFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        if (binding != null) {
-            binding.videoAuthHero.stopPlayback();
+        if (heroVideoController != null) {
+            heroVideoController.release();
         }
         super.onDestroyView();
+        heroVideoController = null;
         binding = null;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (binding != null && !binding.videoAuthHero.isPlaying()) {
-            binding.videoAuthHero.start();
+        if (heroVideoController != null) {
+            heroVideoController.resume();
         }
     }
 
     @Override
     public void onPause() {
-        if (binding != null) {
-            binding.videoAuthHero.pause();
+        if (heroVideoController != null) {
+            heroVideoController.pause();
         }
         super.onPause();
-    }
-
-    private void setupHeroVideo() {
-        Uri videoUri = Uri.parse("android.resource://" + requireContext().getPackageName() + "/" + R.raw.auth_intro);
-        binding.videoAuthHero.setVideoURI(videoUri);
-        binding.videoAuthHero.setOnPreparedListener(player -> {
-            player.setLooping(true);
-            player.setVolume(0f, 0f);
-            cropHeroVideo(player.getVideoWidth(), player.getVideoHeight());
-            binding.videoAuthHero.start();
-        });
-        binding.videoAuthHero.setOnErrorListener((player, what, extra) -> {
-            binding.videoAuthHero.setVisibility(View.GONE);
-            binding.imgAuthHero.setVisibility(View.VISIBLE);
-            return true;
-        });
-    }
-
-    private void cropHeroVideo(int videoWidth, int videoHeight) {
-        binding.videoAuthHero.post(() -> {
-            if (binding == null || videoWidth <= 0 || videoHeight <= 0) return;
-            int viewWidth = binding.authHero.getWidth();
-            int viewHeight = binding.authHero.getHeight();
-            if (viewWidth <= 0 || viewHeight <= 0) return;
-            float scale = Math.max(
-                    viewWidth / (float) videoWidth,
-                    viewHeight / (float) videoHeight
-            );
-            binding.videoAuthHero.setScaleX(scale * videoWidth / viewWidth);
-            binding.videoAuthHero.setScaleY(scale * videoHeight / viewHeight);
-        });
     }
 
     private void submitLogin() {

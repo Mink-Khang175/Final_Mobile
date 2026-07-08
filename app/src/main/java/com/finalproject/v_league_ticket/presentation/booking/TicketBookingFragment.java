@@ -6,17 +6,24 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.finalproject.v_league_ticket.R;
 import com.finalproject.v_league_ticket.data.remote.VLeagueApiClient;
 import com.finalproject.v_league_ticket.databinding.FragmentTicketBookingBinding;
+import com.finalproject.v_league_ticket.databinding.ItemBookingMatchCardBinding;
 import com.finalproject.v_league_ticket.domain.model.Fixture;
 import com.finalproject.v_league_ticket.presentation.auth.AuthLoginFragment;
 import com.finalproject.v_league_ticket.presentation.auth.AuthSession;
@@ -24,6 +31,7 @@ import com.finalproject.v_league_ticket.presentation.profile.HeaderNotificationR
 import com.finalproject.v_league_ticket.presentation.profile.ProfileFragment;
 import com.finalproject.v_league_ticket.presentation.profile.UserCheckoutInfo;
 import com.finalproject.v_league_ticket.presentation.profile.UserEngagementManager;
+import com.finalproject.v_league_ticket.presentation.admin.AdminSummaryStore;
 import com.finalproject.v_league_ticket.presentation.shop.OrderSuccessFragment;
 import com.finalproject.v_league_ticket.presentation.shop.ShopFragment;
 import com.google.firebase.firestore.CollectionReference;
@@ -55,6 +63,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class TicketBookingFragment extends Fragment {
@@ -66,13 +75,16 @@ public class TicketBookingFragment extends Fragment {
     private static final int SERVICE_FEE = 10000;
     private static final int MAX_SEATS = 8;
     private static final long LOCK_DURATION_MS = 10 * 60 * 1000L;
+    private static List<BookingVenue> cachedVenues;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final NumberFormat vndFormatter = NumberFormat.getNumberInstance(Locale.forLanguageTag("vi-VN"));
     private final Handler timerHandler = new Handler(Looper.getMainLooper());
+    private final BookingMatchAdapter matchAdapter = new BookingMatchAdapter();
     private final List<BookingVenue> venues = new ArrayList<>();
     private final List<BookingMatch> apiMatches = new ArrayList<>();
     private final List<TicketSeat> seats = new ArrayList<>();
+    private final Map<String, TicketSeat> seatsById = new HashMap<>();
     private final Set<String> selectedSeatIds = new LinkedHashSet<>();
     private FragmentTicketBookingBinding binding;
     private BookingVenue selectedVenue;
@@ -84,10 +96,15 @@ public class TicketBookingFragment extends Fragment {
     private boolean requestedSelectionApplied;
     private ListenerRegistration seatRegistration;
     private boolean checkoutComplete;
+    private boolean holdTimerRunning;
 
     private final Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
+            if (binding == null || selectedSeatIds.isEmpty()) {
+                holdTimerRunning = false;
+                return;
+            }
             updateSummary();
             timerHandler.postDelayed(this, 1000L);
         }
@@ -127,11 +144,11 @@ public class TicketBookingFragment extends Fragment {
         binding = FragmentTicketBookingBinding.bind(view);
         readRequestedMatch();
         binding.appHeader.tvHeaderSubtitle.setText("Đặt vé");
+        setupMatchList();
         setupActions();
         prefillCustomer();
         loadVenues();
         loadMatches();
-        timerHandler.post(timerRunnable);
     }
 
     private void readRequestedMatch() {
@@ -147,8 +164,19 @@ public class TicketBookingFragment extends Fragment {
         if (!checkoutComplete) releaseSelectedSeats(new ArrayList<>(selectedSeatIds));
         if (seatRegistration != null) seatRegistration.remove();
         timerHandler.removeCallbacks(timerRunnable);
+        holdTimerRunning = false;
+        if (binding != null) binding.rvMatchCards.setAdapter(null);
+        matchAdapter.submitList(new ArrayList<>());
         super.onDestroyView();
         binding = null;
+    }
+
+    private void setupMatchList() {
+        binding.rvMatchCards.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        binding.rvMatchCards.setAdapter(matchAdapter);
+        binding.rvMatchCards.setHasFixedSize(true);
+        binding.rvMatchCards.setItemViewCacheSize(4);
+        binding.rvMatchCards.setItemAnimator(null);
     }
 
     private void setupActions() {
@@ -200,25 +228,30 @@ public class TicketBookingFragment extends Fragment {
 
     private void loadVenues() {
         venues.clear();
-        try (InputStream stream = requireContext().getAssets().open("clubStadiums.json");
-             InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
-            JsonArray array = JsonParser.parseReader(reader).getAsJsonArray();
-            for (JsonElement element : array) {
-                if (!element.isJsonObject()) continue;
-                JsonObject object = element.getAsJsonObject();
-                venues.add(new BookingVenue(
-                        intValue(object, "id"),
-                        string(object, "clubCode"),
-                        string(object, "clubName"),
-                        string(object, "stadiumName"),
-                        string(object, "city"),
-                        string(object, "address")
-                ));
+        if (cachedVenues != null && !cachedVenues.isEmpty()) {
+            venues.addAll(cachedVenues);
+        } else {
+            try (InputStream stream = requireContext().getApplicationContext().getAssets().open("clubStadiums.json");
+                 InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
+                JsonArray array = JsonParser.parseReader(reader).getAsJsonArray();
+                for (JsonElement element : array) {
+                    if (!element.isJsonObject()) continue;
+                    JsonObject object = element.getAsJsonObject();
+                    venues.add(new BookingVenue(
+                            intValue(object, "id"),
+                            string(object, "clubCode"),
+                            string(object, "clubName"),
+                            string(object, "stadiumName"),
+                            string(object, "city"),
+                            string(object, "address")
+                    ));
+                }
+            } catch (Exception ignored) {
+                seedFallbackVenues();
             }
-        } catch (Exception ignored) {
-            seedFallbackVenues();
+            if (venues.isEmpty()) seedFallbackVenues();
+            cachedVenues = new ArrayList<>(venues);
         }
-        if (venues.isEmpty()) seedFallbackVenues();
         renderCityChips();
     }
 
@@ -380,7 +413,6 @@ public class TicketBookingFragment extends Fragment {
 
     private void renderMatches() {
         if (binding == null || selectedVenue == null) return;
-        binding.layoutMatchCards.removeAllViews();
         List<BookingMatch> allMatches = matchesForVenue();
         ensureSelectedRound(allMatches);
         renderRoundChips(allMatches);
@@ -393,10 +425,9 @@ public class TicketBookingFragment extends Fragment {
             selectedMatch = matches.get(0);
             prepareSeats();
         }
-        for (BookingMatch match : matches) {
-            View card = matchCard(match, selectedMatch != null && selectedMatch.getId().equals(match.getId()));
-            binding.layoutMatchCards.addView(card);
-        }
+        List<BookingMatchRow> rows = new ArrayList<>();
+        for (BookingMatch match : matches) rows.add(new BookingMatchRow(match, selectedMatch != null && selectedMatch.getId().equals(match.getId())));
+        matchAdapter.submitList(new ArrayList<>(rows));
         if (selectedMatch != null && seats.isEmpty()) {
             prepareSeats();
         }
@@ -545,6 +576,7 @@ public class TicketBookingFragment extends Fragment {
         clearSeatState();
         if (selectedMatch == null) return;
         seats.addAll(buildSeatLayout(selectedMatch.getBasePrice()));
+        rebuildSeatIndex();
         binding.seatMapView.setCurrentUid(AuthSession.uid(requireContext()));
         binding.seatMapView.setSeats(seats);
         binding.tvSelectedMatch.setText(selectedMatch.title() + "\n"
@@ -574,6 +606,11 @@ public class TicketBookingFragment extends Fragment {
         }
     }
 
+    private void rebuildSeatIndex() {
+        seatsById.clear();
+        for (TicketSeat seat : seats) seatsById.put(seat.getId(), seat);
+    }
+
     private void clearSeatState() {
         if (seatRegistration != null) {
             seatRegistration.remove();
@@ -581,6 +618,7 @@ public class TicketBookingFragment extends Fragment {
         }
         selectedSeatIds.clear();
         seats.clear();
+        seatsById.clear();
         if (binding != null) {
             binding.seatMapView.setSeats(seats);
             binding.seatMapView.setSelectedIds(selectedSeatIds);
@@ -619,11 +657,9 @@ public class TicketBookingFragment extends Fragment {
             long now = System.currentTimeMillis();
             for (TicketSeat seat : seats) seat.markAvailable();
             selectedSeatIds.clear();
-            Map<String, TicketSeat> byId = new HashMap<>();
-            for (TicketSeat seat : seats) byId.put(seat.getId(), seat);
             String uid = AuthSession.uid(requireContext());
             for (DocumentSnapshot doc : snapshot.getDocuments()) {
-                TicketSeat seat = byId.get(doc.getId());
+                TicketSeat seat = seatsById.get(doc.getId());
                 if (seat == null) continue;
                 String status = doc.getString("status");
                 String owner = doc.getString("ownerId");
@@ -814,6 +850,7 @@ public class TicketBookingFragment extends Fragment {
             transaction.set(db.collection("ticket_orders").document(orderId), orderData);
             transaction.set(db.collection("orders").document(orderId), orderData);
             transaction.set(db.collection("bookings").document(orderId), orderData);
+            transaction.set(db.collection("user_ticket_history").document(orderId), orderData);
             return null;
         }).addOnCompleteListener(task -> {
             if (binding == null) return;
@@ -823,6 +860,7 @@ public class TicketBookingFragment extends Fragment {
                 toast(task.getException() == null ? "Đặt vé thất bại." : task.getException().getMessage());
                 return;
             }
+            AdminSummaryStore.recordOrderCreated(orderData);
             rememberTicketCheckoutInfo(provider);
             UserEngagementManager.awardTicketPurchase(uid, orderId);
             UserEngagementManager.notifyUser(uid,
@@ -927,8 +965,10 @@ public class TicketBookingFragment extends Fragment {
             binding.tvSelectedSeats.setText("Chưa chọn ghế.");
             binding.tvTicketTotal.setText("--");
             binding.tvSeatHoldTimer.setText("Giữ chỗ: --:--");
+            stopHoldTimer();
             return;
         }
+        startHoldTimerIfNeeded();
         int regular = selected.size() - vip;
         binding.tvSelectedSeats.setText("Đã chọn: " + TextUtils.join(", ", labels)
                 + "\nVIP " + vip + " | Thường " + regular
@@ -939,6 +979,18 @@ public class TicketBookingFragment extends Fragment {
         } else {
             binding.tvSeatHoldTimer.setText("Giữ chỗ: " + formatRemaining(Math.max(0L, holdUntil - now)));
         }
+    }
+
+    private void startHoldTimerIfNeeded() {
+        if (holdTimerRunning || selectedSeatIds.isEmpty()) return;
+        holdTimerRunning = true;
+        timerHandler.postDelayed(timerRunnable, 1000L);
+    }
+
+    private void stopHoldTimer() {
+        if (!holdTimerRunning) return;
+        holdTimerRunning = false;
+        timerHandler.removeCallbacks(timerRunnable);
     }
 
     private List<TicketSeat> selectedSeats() {
@@ -994,6 +1046,79 @@ public class TicketBookingFragment extends Fragment {
         chip.setFocusable(true);
         chip.setPadding(dp(14), 0, dp(14), 0);
         return chip;
+    }
+
+    private final class BookingMatchAdapter extends ListAdapter<BookingMatchRow, BookingMatchViewHolder> {
+        BookingMatchAdapter() {
+            super(new DiffUtil.ItemCallback<BookingMatchRow>() {
+                @Override
+                public boolean areItemsTheSame(BookingMatchRow oldItem, BookingMatchRow newItem) {
+                    return oldItem.match.getId().equals(newItem.match.getId());
+                }
+
+                @Override
+                public boolean areContentsTheSame(BookingMatchRow oldItem, BookingMatchRow newItem) {
+                    return oldItem.equals(newItem);
+                }
+            });
+        }
+
+        @Override
+        public BookingMatchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new BookingMatchViewHolder(ItemBookingMatchCardBinding.inflate(
+                    LayoutInflater.from(parent.getContext()), parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(BookingMatchViewHolder holder, int position) {
+            holder.bind(getItem(position));
+        }
+    }
+
+    private final class BookingMatchViewHolder extends RecyclerView.ViewHolder {
+        private final ItemBookingMatchCardBinding itemBinding;
+
+        BookingMatchViewHolder(ItemBookingMatchCardBinding itemBinding) {
+            super(itemBinding.getRoot());
+            this.itemBinding = itemBinding;
+        }
+
+        void bind(BookingMatchRow row) {
+            BookingMatch match = row.match;
+            itemBinding.tvBookingMatchTitle.setText(match.title());
+            itemBinding.tvBookingMatchMeta.setText(match.getDate() + " \u2022 " + match.getTime()
+                    + "\n" + match.getStadium()
+                    + "\nT\u1eeb " + formatVnd(match.getBasePrice()));
+            itemBinding.cardBookingMatch.setBackgroundResource(row.selected
+                    ? R.drawable.bg_product_size_selected
+                    : R.drawable.bg_shop_action_simple);
+            itemBinding.tvBookingMatchTitle.setTextColor(getColor(row.selected ? R.color.white : R.color.dark_icon));
+            itemBinding.tvBookingMatchMeta.setTextColor(getColor(row.selected ? R.color.white_alpha_80 : R.color.dark_gray_text));
+            itemBinding.getRoot().setOnClickListener(v -> selectMatch(match));
+        }
+    }
+
+    private static final class BookingMatchRow {
+        final BookingMatch match;
+        final boolean selected;
+
+        BookingMatchRow(BookingMatch match, boolean selected) {
+            this.match = match;
+            this.selected = selected;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof BookingMatchRow)) return false;
+            BookingMatchRow other = (BookingMatchRow) obj;
+            return selected == other.selected && Objects.equals(match, other.match);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(match, selected);
+        }
     }
 
     private Fragment profileOrAuth() {

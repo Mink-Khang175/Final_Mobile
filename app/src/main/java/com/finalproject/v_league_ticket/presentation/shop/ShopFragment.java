@@ -59,8 +59,14 @@ public class ShopFragment extends Fragment {
         binding = FragmentShopBinding.bind(view);
         binding.rvShopClubs.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.rvShopClubs.setAdapter(clubAdapter);
+        binding.rvShopClubs.setHasFixedSize(true);
+        binding.rvShopClubs.setItemViewCacheSize(8);
+        binding.rvShopClubs.setItemAnimator(null);
         binding.rvShopProducts.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         binding.rvShopProducts.setAdapter(productAdapter);
+        binding.rvShopProducts.setHasFixedSize(true);
+        binding.rvShopProducts.setItemViewCacheSize(8);
+        binding.rvShopProducts.setItemAnimator(null);
         setupHeroVideo();
         setupTicketBannerText();
         setupActions();

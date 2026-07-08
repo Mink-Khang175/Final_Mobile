@@ -15,6 +15,8 @@ import java.util.Locale;
 import java.util.Map;
 
 public final class ClubProfileDirectory {
+    private static List<Meta> cachedRows;
+
     private ClubProfileDirectory() {
     }
 
@@ -41,7 +43,7 @@ public final class ClubProfileDirectory {
         }
 
         public String logoUrl() {
-            return teamId <= 0 ? "" : "https://api.sofascore.app/api/v1/team/" + teamId + "/image";
+            return teamId <= 0 ? "" : "https://img.sofascore.com/api/v1/team/" + teamId + "/image";
         }
 
         public int primaryColorInt() {
@@ -64,10 +66,13 @@ public final class ClubProfileDirectory {
         return null;
     }
 
-    public static List<Meta> all(Context context) {
-        Map<String, Meta> rows = defaults();
-        mergeAssetCodes(context, rows);
-        return new ArrayList<>(rows.values());
+    public static synchronized List<Meta> all(Context context) {
+        if (cachedRows == null) {
+            Map<String, Meta> rows = defaults();
+            mergeAssetCodes(context == null ? null : context.getApplicationContext(), rows);
+            cachedRows = new ArrayList<>(rows.values());
+        }
+        return new ArrayList<>(cachedRows);
     }
 
     public static String canonicalKey(String value) {

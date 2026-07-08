@@ -115,6 +115,8 @@ public final class VLeagueApiClient {
     private static final String NEYMAR_SPORT_BASE = "https://neymarsport.com";
     private static final String USER_AGENT =
             "Mozilla/5.0 (Android) VLeagueTicket/1.0";
+    private static final long MEMORY_CACHE_TTL_MS = 60_000L;
+    private static final long BACKUP_WRITE_TTL_MS = 10 * 60_000L;
     private static final VLeagueApiClient INSTANCE = new VLeagueApiClient();
     private static List<Fixture> cachedNextSeasonFixtures;
     private static final DateTimeFormatter NEWS_INPUT =
@@ -124,6 +126,8 @@ public final class VLeagueApiClient {
 
     private final OkHttpClient client;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
+    private final Map<String, MemoryCacheEntry> memoryCache = new HashMap<>();
+    private final Map<String, Long> lastBackupWriteTimes = new HashMap<>();
 
     private static final List<ShopSource> SHOP_SOURCES = buildAccessoryShopSources();
     private static final List<ShopSource> CLUB_SHOP_SOURCES = buildClubShopSources();
@@ -151,7 +155,7 @@ public final class VLeagueApiClient {
             @Override
             public void onSuccess(T data) {
                 if (shouldBackup(data)) {
-                    writer.save(key, data);
+                    if (shouldWriteBackup(key)) writer.save(key, data);
                     callback.onSuccess(data);
                     return;
                 }
@@ -192,6 +196,31 @@ public final class VLeagueApiClient {
     private boolean shouldBackup(Object data) {
         if (data == null) return false;
         return !(data instanceof List<?>) || !((List<?>) data).isEmpty();
+    }
+
+    @SuppressWarnings("unchecked")
+    private synchronized <T> T cachedResponse(String url) {
+        MemoryCacheEntry entry = memoryCache.get(url);
+        if (entry == null) return null;
+        if (System.currentTimeMillis() > entry.expiresAtMs) {
+            memoryCache.remove(url);
+            return null;
+        }
+        return (T) entry.data;
+    }
+
+    private synchronized void cacheResponse(String url, Object data) {
+        if (!shouldBackup(data)) return;
+        memoryCache.put(url, new MemoryCacheEntry(data, System.currentTimeMillis() + MEMORY_CACHE_TTL_MS));
+    }
+
+    private synchronized boolean shouldWriteBackup(String key) {
+        if (key == null || key.trim().isEmpty()) return true;
+        long now = System.currentTimeMillis();
+        Long lastWrite = lastBackupWriteTimes.get(key);
+        if (lastWrite != null && now - lastWrite < BACKUP_WRITE_TTL_MS) return false;
+        lastBackupWriteTimes.put(key, now);
+        return true;
     }
 
     private static List<ShopSource> buildAccessoryShopSources() {
@@ -884,7 +913,23 @@ public final class VLeagueApiClient {
         }
     }
 
+    private static final class MemoryCacheEntry {
+        final Object data;
+        final long expiresAtMs;
+
+        MemoryCacheEntry(Object data, long expiresAtMs) {
+            this.data = data;
+            this.expiresAtMs = expiresAtMs;
+        }
+    }
+
     private <T> void request(String url, Parser<T> parser, String syncKey, DataCallback<T> callback) {
+        T cached = cachedResponse(url);
+        if (cached != null) {
+            mainHandler.post(() -> callback.onSuccess(cached));
+            return;
+        }
+
         Request request = new Request.Builder()
                 .url(url)
                 .header("Accept", "application/json")
@@ -905,6 +950,7 @@ public final class VLeagueApiClient {
                         throw new IOException("HTTP " + response.code());
                     }
                     T parsed = parser.parse(body);
+                    cacheResponse(url, parsed);
                     recordSync(syncKey, true, itemCount(parsed), "");
                     mainHandler.post(() -> callback.onSuccess(parsed));
                 } catch (Exception e) {
@@ -1112,7 +1158,7 @@ public final class VLeagueApiClient {
     private String teamLogoUrl(Long teamId) {
         return teamId == null || teamId <= 0
                 ? ""
-                : "https://api.sofascore.app/api/v1/team/" + teamId + "/image";
+                : "https://img.sofascore.com/api/v1/team/" + teamId + "/image";
     }
 
     private List<NewsPost> parseNews(String body) {
@@ -1351,6 +1397,7 @@ public final class VLeagueApiClient {
             if (!element.isJsonObject()) continue;
             JsonObject incident = element.getAsJsonObject();
             String type = firstNonEmpty(string(incident, "incidentType"), string(incident, "incidentClass"));
+            if ("injuryTime".equalsIgnoreCase(type)) continue;
             String minute = firstNonEmpty(string(incident, "time"), string(incident, "addedTime"));
             String player = playerName(incident, "player");
             String playerIn = playerName(incident, "playerIn");
@@ -1395,6 +1442,7 @@ public final class VLeagueApiClient {
             return "Card";
         }
         if ("substitution".equalsIgnoreCase(type)) return "Substitution";
+        if ("injuryTime".equalsIgnoreCase(type)) return "Bù giờ";
         return type == null || type.trim().isEmpty() ? "Moment" : type;
     }
 
@@ -1596,10 +1644,12 @@ public final class VLeagueApiClient {
             String shirt = firstNonEmpty(string(row, "shirtNumber"), string(player, "jerseyNumber"));
             String position = firstNonEmpty(string(row, "position"), string(player, "position"));
             Long playerId = longObject(player, "id");
+            String photoUrl = playerId == null ? "" : "https://img.sofascore.com/api/v1/player/" + playerId + "/image";
             String prefix = substitute ? "SUB" : "XI";
             if (substitute) substitutes++; else starters++;
             rows.add(side + " " + prefix + ": "
                     + "id=" + (playerId == null ? "" : playerId)
+                    + "|photo=" + photoUrl
                     + "|shirt=" + shirt
                     + "|name=" + name
                     + "|pos=" + position);

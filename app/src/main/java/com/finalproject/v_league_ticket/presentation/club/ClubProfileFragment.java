@@ -369,6 +369,9 @@ public class ClubProfileFragment extends Fragment {
             return;
         }
         RecyclerView grid = new RecyclerView(requireContext());
+        grid.setHasFixedSize(true);
+        grid.setItemViewCacheSize(6);
+        grid.setItemAnimator(null);
         grid.setNestedScrollingEnabled(false);
         grid.setOverScrollMode(View.OVER_SCROLL_NEVER);
         grid.setLayoutManager(new GridLayoutManager(requireContext(), 2));

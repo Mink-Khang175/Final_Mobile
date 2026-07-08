@@ -48,6 +48,8 @@ public class ResultsFragment extends Fragment {
         binding = FragmentMatchesResultsBinding.bind(view);
         binding.rvResults.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvResults.setAdapter(resultAdapter);
+        binding.rvResults.setHasFixedSize(false);
+        binding.rvResults.setItemViewCacheSize(8);
         binding.rvResults.setItemAnimator(null);
         resultAdapter.submitList(new ArrayList<>());
         binding.progressBar.setVisibility(View.GONE);
@@ -253,7 +255,7 @@ public class ResultsFragment extends Fragment {
         }
 
         binding.tvEmptyState.setVisibility(View.GONE);
-        resultAdapter.submitList(rows);
+        resultAdapter.submitList(new ArrayList<>(rows));
     }
 
     private int roundSortValue(Fixture fixture) {
@@ -326,8 +328,8 @@ public class ResultsFragment extends Fragment {
         PopupMenu menu = new PopupMenu(requireContext(), anchor);
         menu.getMenu().add(0, 0, 0, "Mới nhất");
         int maxRound = Math.max(1, selectedSeason.getMaxRound());
-        for (int round = 1; round <= maxRound; round++) {
-            menu.getMenu().add(0, round, round, "Vòng " + round);
+        for (int round = maxRound; round >= 1; round--) {
+            menu.getMenu().add(0, round, maxRound - round + 1, "Vòng " + round);
         }
         if (selectedSeason.hasFinalRound()) {
             menu.getMenu().add(0, maxRound + 1, maxRound + 1, "Chung kết");

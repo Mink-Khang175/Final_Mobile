@@ -11,6 +11,7 @@ import com.finalproject.v_league_ticket.databinding.FragmentCartBinding;
 import com.finalproject.v_league_ticket.presentation.auth.AuthLoginFragment;
 import com.finalproject.v_league_ticket.presentation.auth.AuthSession;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartFragment extends Fragment implements CartStore.Listener {
@@ -27,6 +28,9 @@ public class CartFragment extends Fragment implements CartStore.Listener {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentCartBinding.bind(view);
         binding.rvCartItems.setAdapter(cartAdapter);
+        binding.rvCartItems.setHasFixedSize(true);
+        binding.rvCartItems.setItemViewCacheSize(6);
+        binding.rvCartItems.setItemAnimator(null);
         binding.btnBack.setOnClickListener(v -> getParentFragmentManager().popBackStack());
         binding.btnProceedToCheckout.setOnClickListener(v -> {
             if (CartStore.items().isEmpty()) toast("Giỏ hàng đang trống.");
@@ -45,7 +49,7 @@ public class CartFragment extends Fragment implements CartStore.Listener {
 
     @Override
     public void onCartChanged(List<CartItem> items) {
-        cartAdapter.submitList(items);
+        cartAdapter.submitList(new ArrayList<>(items));
         if (binding != null) binding.tvTotalPrice.setText(CartStore.formatVnd(CartStore.subtotal()));
     }
 

@@ -92,12 +92,14 @@
                 app:tint="@color/stadium_ink" />
 
             <View
+                android:id="@+id/viewHeaderNotificationDot"
                 android:layout_width="9dp"
                 android:layout_height="9dp"
                 android:layout_gravity="top|end"
                 android:layout_marginTop="7dp"
                 android:layout_marginEnd="7dp"
-                android:background="@drawable/bg_header_notification_dot" />
+                android:background="@drawable/bg_header_notification_dot"
+                android:visibility="gone" />
         </FrameLayout>
 
         <FrameLayout

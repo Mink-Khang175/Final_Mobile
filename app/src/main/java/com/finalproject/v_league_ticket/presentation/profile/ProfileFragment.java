@@ -31,9 +31,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.SetOptions;
 
 import java.text.SimpleDateFormat;
@@ -87,6 +89,14 @@ public class ProfileFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (binding != null && AuthSession.hasToken(requireContext())) {
+            loadNotificationCountOptimized(FirebaseFirestore.getInstance(), binding.rowNotifications);
+        }
     }
 
     private void bindProfile() {
@@ -185,11 +195,19 @@ public class ProfileFragment extends Fragment {
     private void loadOrderCount() {
         String uid = AuthSession.uid(requireContext());
         if (uid == null || uid.isEmpty()) return;
-        FirebaseFirestore.getInstance().collection("orders").whereEqualTo("userId", uid).get()
+        LegacyFirestoreCleanup.deleteInvalidShopOrdersForUser(uid, () -> {
+            if (binding == null) return;
+            loadCleanOrderCount(uid);
+        });
+    }
+
+    private void loadCleanOrderCount(String uid) {
+        FirebaseFirestore.getInstance().collection("orders").whereEqualTo("userId", uid)
+                .count().get(AggregateSource.SERVER)
                 .addOnCompleteListener(task -> {
                     if (binding == null) return;
                     binding.tvOrderStatus.setText(task.isSuccessful() && task.getResult() != null
-                            ? String.valueOf(task.getResult().size())
+                            ? String.valueOf(task.getResult().getCount())
                             : "--");
                 });
     }
@@ -227,20 +245,22 @@ public class ProfileFragment extends Fragment {
         });
         loadActiveBadgeCount(db, binding.rowMyBadges);
         loadRowCount(db, "user_vouchers", binding.rowVouchers);
-        loadNotificationCount(db, binding.rowNotifications);
-        db.collection("user_predictions").whereEqualTo("userId", uid).get().addOnCompleteListener(task -> {
+        loadNotificationCountOptimized(db, binding.rowNotifications);
+        db.collection("user_predictions").whereEqualTo("userId", uid)
+                .count().get(AggregateSource.SERVER).addOnCompleteListener(task -> {
             if (binding == null) return;
             binding.tvPredictionAccuracy.setText(task.isSuccessful() && task.getResult() != null
-                    ? String.valueOf(task.getResult().size())
+                    ? String.valueOf(task.getResult().getCount())
                     : "--");
         });
     }
 
     private void loadRowCount(FirebaseFirestore db, String collection, ItemProfileRowBinding row) {
-        db.collection(collection).whereEqualTo("userId", AuthSession.uid(requireContext())).get()
+        db.collection(collection).whereEqualTo("userId", AuthSession.uid(requireContext()))
+                .count().get(AggregateSource.SERVER)
                 .addOnCompleteListener(task -> {
                     if (binding == null || !task.isSuccessful() || task.getResult() == null) return;
-                    int count = task.getResult().size();
+                    long count = task.getResult().getCount();
                     row.tvRowBadge.setVisibility(count > 0 ? View.VISIBLE : View.GONE);
                     row.tvRowBadge.setText(String.valueOf(count));
                 });
@@ -302,10 +322,10 @@ public class ProfileFragment extends Fragment {
         db.collection("user_badges")
                 .whereEqualTo("userId", AuthSession.uid(requireContext()))
                 .whereEqualTo("status", "active")
-                .get()
+                .count().get(AggregateSource.SERVER)
                 .addOnCompleteListener(task -> {
                     if (binding == null || !task.isSuccessful() || task.getResult() == null) return;
-                    int count = task.getResult().size();
+                    long count = task.getResult().getCount();
                     row.tvRowBadge.setVisibility(count > 0 ? View.VISIBLE : View.GONE);
                     row.tvRowBadge.setText(String.valueOf(count));
                 });
@@ -324,23 +344,33 @@ public class ProfileFragment extends Fragment {
     }
 
     private void loadNotificationCount(FirebaseFirestore db, ItemProfileRowBinding row) {
+        loadNotificationCountOptimized(db, row);
+    }
+
+    private void loadNotificationCountOptimized(FirebaseFirestore db, ItemProfileRowBinding row) {
         String uid = AuthSession.uid(requireContext());
-        db.collection("notifications").get().addOnCompleteListener(task -> {
-            if (binding == null || !task.isSuccessful() || task.getResult() == null) return;
-            int count = 0;
-            for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-                String userId = first(doc, "userId");
-                String targetRole = first(doc, "targetRole", "target");
-                boolean forMe = uid != null && uid.equals(userId);
-                boolean broadcast = userId.isEmpty()
-                        && (targetRole.isEmpty()
-                        || "all".equalsIgnoreCase(targetRole)
-                        || "user".equalsIgnoreCase(targetRole)
-                        || "người dùng".equalsIgnoreCase(targetRole));
-                if (forMe || broadcast) count++;
-            }
+        if (uid == null || uid.isEmpty()) return;
+        NotificationReadStore.loadUnreadCount(uid, count -> {
+            if (binding == null) return;
             row.tvRowBadge.setVisibility(count > 0 ? View.VISIBLE : View.GONE);
             row.tvRowBadge.setText(String.valueOf(count));
+            binding.appHeader.viewHeaderNotificationDot.setVisibility(count > 0 ? View.VISIBLE : View.GONE);
+        });
+    }
+
+    private void collectNotificationIds(Query query, java.util.Set<String> ids,
+                                        java.util.concurrent.atomic.AtomicInteger pending,
+                                        ItemProfileRowBinding row) {
+        query.get().addOnCompleteListener(task -> {
+            if (binding == null) return;
+            if (task.isSuccessful() && task.getResult() != null) {
+                for (DocumentSnapshot doc : task.getResult().getDocuments()) ids.add(doc.getId());
+            }
+            if (pending.decrementAndGet() == 0) {
+                int count = ids.size();
+                row.tvRowBadge.setVisibility(count > 0 ? View.VISIBLE : View.GONE);
+                row.tvRowBadge.setText(String.valueOf(count));
+            }
         });
     }
 

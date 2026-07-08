@@ -1,5 +1,7 @@
 package com.finalproject.v_league_ticket.presentation.booking;
 
+import java.util.Objects;
+
 public class BookingMatch {
     private final String id;
     private final long externalId;
@@ -97,5 +99,31 @@ public class BookingMatch {
 
     private static String safe(String value) {
         return value == null ? "" : value.trim();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof BookingMatch)) return false;
+        BookingMatch other = (BookingMatch) obj;
+        return externalId == other.externalId
+                && basePrice == other.basePrice
+                && startTimestamp == other.startTimestamp
+                && round == other.round
+                && Objects.equals(id, other.id)
+                && Objects.equals(city, other.city)
+                && Objects.equals(stadium, other.stadium)
+                && Objects.equals(address, other.address)
+                && Objects.equals(date, other.date)
+                && Objects.equals(time, other.time)
+                && Objects.equals(home, other.home)
+                && Objects.equals(away, other.away)
+                && Objects.equals(league, other.league);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, externalId, city, stadium, address, date, time, home, away,
+                league, basePrice, startTimestamp, round);
     }
 }

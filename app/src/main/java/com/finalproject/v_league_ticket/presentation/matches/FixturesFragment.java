@@ -42,6 +42,8 @@ public class FixturesFragment extends Fragment {
         binding = FragmentMatchesFixturesBinding.bind(view);
         binding.rvFixtures.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvFixtures.setAdapter(fixtureAdapter);
+        binding.rvFixtures.setHasFixedSize(false);
+        binding.rvFixtures.setItemViewCacheSize(8);
         binding.rvFixtures.setItemAnimator(null);
         fixtureAdapter.submitList(new ArrayList<>());
         binding.progressBar.setVisibility(View.GONE);

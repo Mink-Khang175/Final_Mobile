@@ -42,8 +42,11 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
     }
 
     public void select(NewsCategory category) {
+        int previousIndex = items.indexOf(selected);
         selected = category;
-        notifyDataSetChanged();
+        int nextIndex = items.indexOf(selected);
+        if (previousIndex >= 0) notifyItemChanged(previousIndex);
+        if (nextIndex >= 0 && nextIndex != previousIndex) notifyItemChanged(nextIndex);
     }
 
     static class CategoryViewHolder extends RecyclerView.ViewHolder {

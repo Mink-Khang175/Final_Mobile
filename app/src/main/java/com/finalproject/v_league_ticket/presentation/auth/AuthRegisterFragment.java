@@ -28,6 +28,7 @@ import java.util.Map;
 
 public class AuthRegisterFragment extends Fragment {
     private FragmentAuthRegisterBinding binding;
+    private AuthHeroVideoController heroVideoController;
 
     public AuthRegisterFragment() {
         super(R.layout.fragment_auth_register);
@@ -37,6 +38,8 @@ public class AuthRegisterFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentAuthRegisterBinding.bind(view);
+        heroVideoController = new AuthHeroVideoController(binding.videoAuthHero);
+        heroVideoController.prepare(requireContext());
         bindToggleText();
         binding.btnCreateAccount.setOnClickListener(v -> submitRegister());
         binding.tvGoLogin.setOnClickListener(v -> navigateTo(new AuthLoginFragment()));
@@ -46,8 +49,28 @@ public class AuthRegisterFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        if (heroVideoController != null) {
+            heroVideoController.release();
+        }
         super.onDestroyView();
+        heroVideoController = null;
         binding = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (heroVideoController != null) {
+            heroVideoController.resume();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        if (heroVideoController != null) {
+            heroVideoController.pause();
+        }
+        super.onPause();
     }
 
     private void submitRegister() {

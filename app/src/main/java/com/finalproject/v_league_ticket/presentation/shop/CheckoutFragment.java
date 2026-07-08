@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 
 import com.finalproject.v_league_ticket.R;
 import com.finalproject.v_league_ticket.databinding.FragmentCheckoutBinding;
+import com.finalproject.v_league_ticket.presentation.admin.AdminSummaryStore;
 import com.finalproject.v_league_ticket.presentation.auth.AuthLoginFragment;
 import com.finalproject.v_league_ticket.presentation.auth.AuthSession;
 import com.finalproject.v_league_ticket.presentation.profile.UserCheckoutInfo;
@@ -84,11 +85,12 @@ public class CheckoutFragment extends Fragment {
             return;
         }
         String orderId = "ORD" + System.currentTimeMillis();
+        Map<String, Object> orderData = orderData(orderId);
         rememberCheckoutInfo();
         binding.btnPlaceOrder.setEnabled(false);
         binding.btnPlaceOrder.setText("ĐANG ĐẶT HÀNG...");
         FirebaseFirestore.getInstance().collection("orders").document(orderId)
-                .set(orderData(orderId))
+                .set(orderData)
                 .addOnCompleteListener(task -> {
                     if (binding == null) return;
                     binding.btnPlaceOrder.setEnabled(true);
@@ -97,6 +99,7 @@ public class CheckoutFragment extends Fragment {
                         toast("Không lưu được đơn hàng. Vui lòng thử lại.");
                         return;
                     }
+                    AdminSummaryStore.recordOrderCreated(orderData);
                     String uid = AuthSession.uid(requireContext());
                     UserEngagementManager.awardShopPurchase(uid, orderId, CartStore.subtotal() + SHIPPING_FEE);
                     UserEngagementManager.notifyUser(uid,

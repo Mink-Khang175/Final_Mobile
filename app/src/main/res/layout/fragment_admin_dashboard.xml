@@ -37,7 +37,7 @@
                     android:background="@drawable/bg_home_live_pill"
                     android:gravity="center"
                     android:paddingHorizontal="12dp"
-                    android:text="QUẢN TRỊ"
+                    android:text="QU&#7842;N TR&#7882;"
                     android:textColor="@color/white"
                     android:textSize="11sp"
                     android:textStyle="bold" />
@@ -47,7 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
-                    android:text="Bảng quản trị"
+                    android:text="B&#7843;ng qu&#7843;n tr&#7883;"
                     android:textColor="@color/white"
                     android:textSize="28sp"
                     android:textStyle="bold" />
@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:lineSpacingExtra="4dp"
-                    android:text="Quản lý người dùng, đơn hàng, sản phẩm và cấu hình ứng dụng."
+                    android:text="Qu&#7843;n l&#253; ng&#432;&#7901;i d&#249;ng, &#273;&#417;n h&#224;ng, s&#7843;n ph&#7849;m v&#224; c&#7845;u h&#236;nh &#7913;ng d&#7909;ng."
                     android:textColor="@color/white_alpha_80"
                     android:textSize="14sp" />
 
@@ -94,7 +94,7 @@
                     android:fontFamily="sans-serif-condensed"
                     android:includeFontPadding="false"
                     android:letterSpacing="0"
-                    android:text="Tổng quan vận hành"
+                    android:text="T&#7893;ng quan v&#7853;n h&#224;nh"
                     android:textColor="@color/stadium_ink"
                     android:textSize="23sp"
                     android:textStyle="bold|italic" />
@@ -121,7 +121,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="NGƯỜI DÙNG"
+                        android:text="NG&#431;&#7900;I D&#217;NG"
                         android:textColor="@color/slate_caption"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -150,7 +150,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="ĐƠN HÀNG"
+                        android:text="&#272;&#416;N H&#192;NG"
                         android:textColor="@color/slate_caption"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -178,7 +178,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="SẢN PHẨM"
+                        android:text="S&#7842;N PH&#7848;M"
                         android:textColor="@color/slate_caption"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -245,7 +245,7 @@
                     android:fontFamily="sans-serif-condensed"
                     android:includeFontPadding="false"
                     android:letterSpacing="0"
-                    android:text="Chức năng quản trị"
+                    android:text="Ch&#7913;c n&#259;ng qu&#7843;n tr&#7883;"
                     android:textColor="@color/stadium_ink"
                     android:textSize="23sp"
                     android:textStyle="bold|italic" />
@@ -284,6 +284,15 @@
                     android:layout_height="128dp"
                     android:layout_columnWeight="1"
                     android:layout_marginEnd="6dp"
+                    android:layout_marginBottom="12dp" />
+
+                <include
+                    android:id="@+id/cardDelivery"
+                    layout="@layout/item_admin_module_card"
+                    android:layout_width="0dp"
+                    android:layout_height="128dp"
+                    android:layout_columnWeight="1"
+                    android:layout_marginStart="6dp"
                     android:layout_marginBottom="12dp" />
 
                 <include
@@ -345,7 +354,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="CLB thiếu sản phẩm"
+                    android:text="CLB thi&#7871;u s&#7843;n ph&#7849;m"
                     android:textColor="@color/stadium_ink"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -356,7 +365,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:lineSpacingExtra="6dp"
-                    android:text="Đang kiểm tra sản phẩm..."
+                    android:text="&#272;ang ki&#7875;m tra s&#7843;n ph&#7849;m..."
                     android:textColor="@color/dark_gray_text"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -384,7 +393,7 @@
                 android:layout_marginTop="18dp"
                 android:background="@drawable/bg_order_red_button"
                 android:gravity="center"
-                android:text="ĐĂNG XUẤT ADMIN"
+                android:text="&#272;&#258;NG XU&#7844;T ADMIN"
                 android:textColor="@color/white"
                 android:textSize="13sp"
                 android:textStyle="bold" />

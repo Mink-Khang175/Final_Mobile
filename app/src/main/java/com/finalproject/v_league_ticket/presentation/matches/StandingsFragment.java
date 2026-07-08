@@ -41,6 +41,8 @@ public class StandingsFragment extends Fragment {
         binding = FragmentMatchesStandingsBinding.bind(view);
         binding.rvStandings.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvStandings.setAdapter(standingsAdapter);
+        binding.rvStandings.setHasFixedSize(false);
+        binding.rvStandings.setItemViewCacheSize(12);
         binding.rvStandings.setItemAnimator(null);
         standingsAdapter.submitList(new ArrayList<>());
         binding.progressBar.setVisibility(View.GONE);
@@ -135,7 +137,7 @@ public class StandingsFragment extends Fragment {
                 }
                 binding.tableContainer.setVisibility(View.VISIBLE);
                 binding.tvEmptyState.setVisibility(View.GONE);
-                standingsAdapter.submitList(data);
+                standingsAdapter.submitList(new ArrayList<>(data));
             }
 
             @Override

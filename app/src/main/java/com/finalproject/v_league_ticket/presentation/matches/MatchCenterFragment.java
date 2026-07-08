@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.view.Gravity;
 import android.view.View;
@@ -16,8 +17,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.finalproject.v_league_ticket.R;
 import com.finalproject.v_league_ticket.data.remote.VLeagueApiClient;
 import com.finalproject.v_league_ticket.databinding.FragmentMatchesDetailsBinding;
@@ -101,8 +107,10 @@ public class MatchCenterFragment extends Fragment {
         binding.tvVenueDate.setText(venue);
         binding.tvVenueDate.setVisibility(venue == null || venue.trim().isEmpty() || "Venue TBA".equalsIgnoreCase(venue.trim())
                 ? View.GONE : View.VISIBLE);
-        binding.tvHomeName.setText(args.getString(ARG_HOME, "Home"));
-        binding.tvAwayName.setText(args.getString(ARG_AWAY, "Away"));
+        String home = args.getString(ARG_HOME, "Home");
+        String away = args.getString(ARG_AWAY, "Away");
+        binding.tvHomeName.setText(home);
+        binding.tvAwayName.setText(away);
         binding.tvScore.setText(args.getInt(ARG_HOME_SCORE, 0) + " - " + args.getInt(ARG_AWAY_SCORE, 0));
         boolean hasPenalty = args.containsKey(ARG_HOME_PENALTY) && args.containsKey(ARG_AWAY_PENALTY);
         if (hasPenalty) {
@@ -269,6 +277,7 @@ public class MatchCenterFragment extends Fragment {
     }
 
     private void renderFacts(LinearLayout container, List<String> rows) {
+        if (!shouldRenderSection(container, "facts", rows)) return;
         container.removeAllViews();
         if (rows == null || rows.isEmpty()) {
             addEmptyState(container, "Chưa có dữ kiện trận đấu.");
@@ -286,6 +295,7 @@ public class MatchCenterFragment extends Fragment {
     }
 
     private void renderSimpleRows(LinearLayout container, List<String> rows, String emptyMessage) {
+        if (!shouldRenderSection(container, "simple:" + emptyMessage, rows)) return;
         container.removeAllViews();
         if (rows == null || rows.isEmpty()) {
             addEmptyState(container, emptyMessage);
@@ -308,6 +318,7 @@ public class MatchCenterFragment extends Fragment {
     }
 
     private void renderRatings(LinearLayout container, List<String> rows, String emptyMessage) {
+        if (!shouldRenderSection(container, "ratings:" + emptyMessage, rows)) return;
         container.removeAllViews();
         if (rows == null || rows.isEmpty()) {
             addEmptyState(container, emptyMessage);
@@ -393,12 +404,27 @@ public class MatchCenterFragment extends Fragment {
         initials.setBackgroundResource(R.drawable.bg_player_avatar);
         avatar.addView(initials, new FrameLayout.LayoutParams(dp(38), dp(38), Gravity.CENTER));
         if (!player.photoUrl().isEmpty()) {
+            photo.setVisibility(View.GONE);
             Glide.with(photo).load(player.photoUrl())
                     .placeholder(R.drawable.bg_player_avatar)
                     .error(R.drawable.bg_player_avatar)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            photo.setVisibility(View.GONE);
+                            initials.setVisibility(View.VISIBLE);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            photo.setVisibility(View.VISIBLE);
+                            initials.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
                     .centerCrop()
                     .into(photo);
-            initials.setVisibility(View.GONE);
         }
         row.addView(avatar, new LinearLayout.LayoutParams(dp(42), dp(42)));
 
@@ -436,6 +462,7 @@ public class MatchCenterFragment extends Fragment {
     }
 
     private void renderTimeline(LinearLayout container, List<String> rows, boolean compact) {
+        if (!shouldRenderSection(container, "timeline:" + compact, rows)) return;
         container.removeAllViews();
         if (rows == null || rows.isEmpty()) {
             addEmptyState(container, "Đang chờ diễn biến trận đấu.");
@@ -468,8 +495,10 @@ public class MatchCenterFragment extends Fragment {
             LinearLayout titleRow = new LinearLayout(requireContext());
             titleRow.setOrientation(LinearLayout.HORIZONTAL);
             titleRow.setGravity(Gravity.CENTER_VERTICAL);
-            TextView icon = text(event.icon, 10f, R.color.white, true, false);
-            icon.setGravity(Gravity.CENTER);
+            ImageView icon = new ImageView(requireContext());
+            icon.setPadding(dp(5), dp(5), dp(5), dp(5));
+            icon.setImageResource(event.iconRes);
+            icon.setColorFilter(requireContext().getColor(R.color.white));
             icon.setBackground(rounded(requireContext().getColor(event.iconColorRes), dp(999), 0, 0));
             LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(dp(22), dp(22));
             iconParams.setMargins(0, 0, dp(8), 0);
@@ -486,6 +515,7 @@ public class MatchCenterFragment extends Fragment {
     }
 
     private void renderStats(LinearLayout container, List<String> rows, int limit) {
+        if (!shouldRenderSection(container, "stats:" + limit, rows)) return;
         container.removeAllViews();
         if (rows == null || rows.isEmpty()) {
             addEmptyState(container, "Đang chờ dữ liệu thống kê.");
@@ -573,6 +603,7 @@ public class MatchCenterFragment extends Fragment {
     }
 
     private void renderLineups(LinearLayout container, List<String> rows) {
+        if (!shouldRenderSection(container, "lineups", rows)) return;
         container.removeAllViews();
         if (rows == null || rows.isEmpty()) {
             addEmptyState(container, "Đang chờ dữ liệu đội hình.");
@@ -696,12 +727,27 @@ public class MatchCenterFragment extends Fragment {
         initials.setBackgroundResource(R.drawable.bg_player_avatar);
         avatar.addView(initials, new FrameLayout.LayoutParams(dp(52), dp(52), Gravity.TOP | Gravity.CENTER_HORIZONTAL));
         if (!player.photoUrl().isEmpty()) {
+            photo.setVisibility(View.GONE);
             Glide.with(photo).load(player.photoUrl())
                     .placeholder(R.drawable.bg_player_avatar)
                     .error(R.drawable.bg_player_avatar)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            photo.setVisibility(View.GONE);
+                            initials.setVisibility(View.VISIBLE);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            photo.setVisibility(View.VISIBLE);
+                            initials.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
                     .centerCrop()
                     .into(photo);
-            initials.setVisibility(View.GONE);
         }
 
         TextView number = text(player.shirt.isEmpty() ? "--" : player.shirt, 10f, R.color.white, true, false);
@@ -764,27 +810,27 @@ public class MatchCenterFragment extends Fragment {
         String normalizedBody = body.toLowerCase(Locale.ROOT);
         if (normalized.contains("period")) {
             if (normalizedBody.contains("ft")) {
-                return new TimelineEvent(minute, "Kết thúc trận", "Trận đấu khép lại" + scoreSuffix(body), "", R.color.stadium_ink, "FT", R.color.stadium_ink);
+                return new TimelineEvent(minute, "Kết thúc trận", "Trận đấu khép lại" + scoreSuffix(body), "", R.color.stadium_ink, R.drawable.ic_check_circle_48, R.color.stadium_ink);
             }
             if (normalizedBody.contains("ht")) {
-                return new TimelineEvent(minute, "Hết hiệp 1", "Hai đội bước vào giờ nghỉ" + scoreSuffix(body), "", R.color.dark_gray_text, "HT", R.color.dark_gray_text);
+                return new TimelineEvent(minute, "Hết hiệp 1", "Hai đội bước vào giờ nghỉ" + scoreSuffix(body), "", R.color.dark_gray_text, R.drawable.ic_timeline_substitution, R.color.dark_gray_text);
             }
-            return new TimelineEvent(minute, "Mốc trận đấu", readableBody(body), "", R.color.dark_gray_text, "i", R.color.dark_gray_text);
+            return new TimelineEvent(minute, "Mốc trận đấu", readableBody(body), "", R.color.dark_gray_text, R.drawable.ic_timeline_substitution, R.color.dark_gray_text);
         }
         if (normalized.contains("goal")) {
-            return new TimelineEvent(minute, "Bàn thắng", readableBody(body), "", R.color.stadium_ink, "G", R.color.green_turf);
+            return new TimelineEvent(minute, "Bàn thắng", readableBody(body), "", R.color.stadium_ink, R.drawable.sports_soccer_24, R.color.green_turf);
         }
         if (normalized.contains("substitution")) {
-            return new TimelineEvent(minute, "Thay người", readableBody(body), substitutionDetail(body), R.color.green_turf, "↔", R.color.green_turf);
+            return new TimelineEvent(minute, "Thay người", readableBody(body), substitutionDetail(body), R.color.green_turf, R.drawable.ic_timeline_substitution, R.color.green_turf);
         }
         if (normalized.contains("card")) {
             boolean redCard = normalized.contains("red") || normalizedBody.contains("red") || normalizedBody.contains("đỏ") || normalizedBody.contains("do");
-            return new TimelineEvent(minute, redCard ? "Thẻ đỏ" : "Thẻ vàng", readableBody(body), "", redCard ? R.color.red_energy : R.color.orange_spark, redCard ? "R" : "Y", redCard ? R.color.red_energy : R.color.orange_spark);
+            return new TimelineEvent(minute, redCard ? "Thẻ đỏ" : "Thẻ vàng", readableBody(body), "", redCard ? R.color.red_energy : R.color.orange_spark, R.drawable.ic_timeline_card, redCard ? R.color.red_energy : R.color.orange_spark);
         }
         if (normalized.contains("penalty")) {
-            return new TimelineEvent(minute, "Penalty", readableBody(body), "", R.color.orange_spark, "P", R.color.orange_spark);
+            return new TimelineEvent(minute, "Penalty", readableBody(body), "", R.color.orange_spark, R.drawable.ic_timeline_penalty, R.color.orange_spark);
         }
-        return new TimelineEvent(minute, "Diễn biến", readableBody(body), "", R.color.dark_gray_text, "i", R.color.dark_gray_text);
+        return new TimelineEvent(minute, "Diễn biến", readableBody(body), "", R.color.dark_gray_text, R.drawable.ic_bookmark_24, R.color.dark_gray_text);
     }
 
     private StatRow parseStatRow(String raw) {
@@ -843,7 +889,8 @@ public class MatchCenterFragment extends Fragment {
             String shirt = metadataValue(clean, "shirt");
             String name = metadataValue(clean, "name");
             String position = metadataValue(clean, "pos");
-            return new PlayerRow(shirt, name, position, playerId);
+            String photo = metadataValue(clean, "photo");
+            return new PlayerRow(shirt, name, position, playerId, photo);
         }
         String shirt = "";
         if (clean.startsWith("#")) {
@@ -859,7 +906,7 @@ public class MatchCenterFragment extends Fragment {
             position = clean.substring(separator + 3).trim();
             clean = clean.substring(0, separator).trim();
         }
-        return new PlayerRow(shirt, clean, position, "");
+        return new PlayerRow(shirt, clean, position, "", "");
     }
 
     private String metadataValue(String value, String key) {
@@ -877,6 +924,23 @@ public class MatchCenterFragment extends Fragment {
         empty.setPadding(dp(12), dp(18), dp(12), dp(18));
         container.addView(empty, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+    }
+
+    private boolean shouldRenderSection(LinearLayout container, String section, List<String> rows) {
+        String key = renderKey(section, rows);
+        Object previous = container.getTag();
+        if (key.equals(previous)) return false;
+        container.setTag(key);
+        return true;
+    }
+
+    private String renderKey(String section, List<String> rows) {
+        StringBuilder builder = new StringBuilder(section == null ? "" : section);
+        builder.append('|').append(rows == null ? 0 : rows.size());
+        if (rows != null) {
+            for (String row : rows) builder.append('|').append(row == null ? "" : row);
+        }
+        return builder.toString();
     }
 
     private TextView text(String value, float sizeSp, int colorRes, boolean bold, boolean allCaps) {
@@ -1056,20 +1120,20 @@ public class MatchCenterFragment extends Fragment {
         final String body;
         final String detail;
         final int colorRes;
-        final String icon;
+        final int iconRes;
         final int iconColorRes;
 
         TimelineEvent(String minute, String title, String body, String detail, int colorRes) {
-            this(minute, title, body, detail, colorRes, "i", R.color.dark_gray_text);
+            this(minute, title, body, detail, colorRes, R.drawable.ic_bookmark_24, R.color.dark_gray_text);
         }
 
-        TimelineEvent(String minute, String title, String body, String detail, int colorRes, String icon, int iconColorRes) {
+        TimelineEvent(String minute, String title, String body, String detail, int colorRes, int iconRes, int iconColorRes) {
             this.minute = minute == null || minute.isEmpty() ? "--'" : minute;
             this.title = title == null ? "Diễn biến" : title;
             this.body = body == null || body.isEmpty() ? "--" : body;
             this.detail = detail == null ? "" : detail;
             this.colorRes = colorRes;
-            this.icon = icon == null || icon.isEmpty() ? "i" : icon;
+            this.iconRes = iconRes;
             this.iconColorRes = iconColorRes;
         }
     }
@@ -1095,12 +1159,18 @@ public class MatchCenterFragment extends Fragment {
         final String name;
         final String position;
         final String playerId;
+        final String photoUrl;
 
         PlayerRow(String shirt, String name, String position, String playerId) {
+            this(shirt, name, position, playerId, "");
+        }
+
+        PlayerRow(String shirt, String name, String position, String playerId, String photoUrl) {
             this.shirt = shirt == null ? "" : shirt;
             this.name = name == null || name.isEmpty() ? "Player" : name;
             this.position = position == null ? "" : position;
             this.playerId = playerId == null ? "" : playerId;
+            this.photoUrl = photoUrl == null ? "" : photoUrl;
         }
 
         String shortName() {
@@ -1116,7 +1186,8 @@ public class MatchCenterFragment extends Fragment {
         }
 
         String photoUrl() {
-            return playerId.isEmpty() ? "" : "https://api.sofascore.app/api/v1/player/" + playerId + "/image";
+            if (!photoUrl.isEmpty()) return photoUrl;
+            return playerId.isEmpty() ? "" : "https://img.sofascore.com/api/v1/player/" + playerId + "/image";
         }
     }
 
@@ -1134,7 +1205,7 @@ public class MatchCenterFragment extends Fragment {
         }
 
         String photoUrl() {
-            return playerId.isEmpty() ? "" : "https://api.sofascore.app/api/v1/player/" + playerId + "/image";
+            return playerId.isEmpty() ? "" : "https://img.sofascore.com/api/v1/player/" + playerId + "/image";
         }
     }
 

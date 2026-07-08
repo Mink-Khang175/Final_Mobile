@@ -98,9 +98,13 @@ public class HomepageFragment extends Fragment {
     private void setupLists() {
         binding.rvNews.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.rvNews.setAdapter(newsAdapter);
+        binding.rvNews.setHasFixedSize(false);
+        binding.rvNews.setItemViewCacheSize(6);
         binding.rvNews.setItemAnimator(null);
         binding.rvUpcomingFixtures.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.rvUpcomingFixtures.setAdapter(fixtureAdapter);
+        binding.rvUpcomingFixtures.setHasFixedSize(false);
+        binding.rvUpcomingFixtures.setItemViewCacheSize(6);
         binding.rvUpcomingFixtures.setItemAnimator(null);
     }
 
@@ -174,7 +178,7 @@ public class HomepageFragment extends Fragment {
             @Override
             public void onSuccess(List<NewsPost> data) {
                 if (binding == null || data == null || data.isEmpty()) return;
-                newsAdapter.submitList(data);
+                newsAdapter.submitList(new ArrayList<>(data));
             }
 
             @Override

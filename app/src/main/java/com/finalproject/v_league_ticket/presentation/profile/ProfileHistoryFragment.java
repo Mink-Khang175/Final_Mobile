@@ -17,8 +17,10 @@ import com.finalproject.v_league_ticket.presentation.shop.CartStore;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.SetOptions;
 
 import java.text.SimpleDateFormat;
@@ -40,9 +42,16 @@ public class ProfileHistoryFragment extends Fragment {
     private static final String MODE_VOUCHERS = "vouchers";
     private static final String MODE_NOTIFICATIONS = "notifications";
     private static final String MODE_PREDICTIONS = "predictions";
+    private static final int HISTORY_PAGE_SIZE = 25;
 
     private FragmentProfileHistoryBinding binding;
     private String mode = MODE_ORDERS;
+    private final List<ProfileHistoryItem> pagedItems = new ArrayList<>();
+    private DocumentSnapshot lastHistoryDoc;
+    private boolean hasMoreHistory;
+    private boolean loadingHistoryPage;
+    private boolean ticketHistorySeeded;
+    private boolean invalidShopOrdersCleaned;
     private final ProfileHistoryAdapter adapter = new ProfileHistoryAdapter(item -> {
         if (MODE_ORDERS.equals(mode)) {
             navigateTo(OrderDetailFragment.newInstance(item.getId()));
@@ -97,7 +106,11 @@ public class ProfileHistoryFragment extends Fragment {
         binding = FragmentProfileHistoryBinding.bind(view);
         mode = requireArguments().getString(ARG_MODE, MODE_ORDERS);
         binding.rvHistory.setAdapter(adapter);
+        binding.rvHistory.setHasFixedSize(true);
+        binding.rvHistory.setItemViewCacheSize(8);
+        binding.rvHistory.setItemAnimator(null);
         binding.btnBack.setOnClickListener(v -> getParentFragmentManager().popBackStack());
+        binding.btnLoadMore.setOnClickListener(v -> loadMoreForMode());
         binding.tvHistoryTitle.setText(titleFor(mode));
         loadMode();
     }
@@ -118,24 +131,140 @@ public class ProfileHistoryFragment extends Fragment {
     }
 
     private void loadMode() {
+        resetHistoryPaging();
         if (MODE_ORDERS.equals(mode)) {
-            loadOrders();
+            loadOrdersPage(true);
         } else if (MODE_TICKETS.equals(mode)) {
-            loadTickets();
+            loadTicketHistoryPage(true);
         } else if (MODE_LOYALTY.equals(mode)) {
             loadLoyalty();
         } else if (MODE_BADGES.equals(mode)) {
-            loadActiveBadges();
+            loadActiveBadgesPage(true);
         } else if (MODE_VOUCHERS.equals(mode)) {
-            loadCollection("user_vouchers", emptyFor(mode), doc -> genericItem(doc, "Voucher"));
+            loadCollectionPage("user_vouchers", emptyFor(mode), doc -> genericItem(doc, "Voucher"), true);
         } else if (MODE_NOTIFICATIONS.equals(mode)) {
-            loadNotifications();
+            loadNotificationsOptimized();
         } else if (MODE_PREDICTIONS.equals(mode)) {
-            loadPredictionTickets();
+            loadPredictionTicketsPage(true);
         }
     }
 
+    private void resetHistoryPaging() {
+        pagedItems.clear();
+        lastHistoryDoc = null;
+        hasMoreHistory = false;
+        loadingHistoryPage = false;
+        if (binding != null) binding.btnLoadMore.setVisibility(View.GONE);
+    }
+
+    private void loadMoreForMode() {
+        if (MODE_ORDERS.equals(mode)) {
+            loadOrdersPage(false);
+        } else if (MODE_TICKETS.equals(mode)) {
+            loadTicketHistoryPage(false);
+        } else if (MODE_BADGES.equals(mode)) {
+            loadActiveBadgesPage(false);
+        } else if (MODE_VOUCHERS.equals(mode)) {
+            loadCollectionPage("user_vouchers", emptyFor(mode), doc -> genericItem(doc, "Voucher"), false);
+        } else if (MODE_PREDICTIONS.equals(mode)) {
+            loadPredictionTicketsPage(false);
+        }
+    }
+
+    private void loadTicketHistoryPage(boolean firstPage) {
+        String uid = AuthSession.uid(requireContext());
+        if (uid == null || uid.isEmpty()) {
+            showItems(new ArrayList<>(), emptyFor(mode));
+            return;
+        }
+        if (firstPage && !ticketHistorySeeded) {
+            showLoading();
+            seedLegacyTicketHistory(uid, () -> {
+                ticketHistorySeeded = true;
+                loadCanonicalTicketHistoryPage(uid, true);
+            });
+            return;
+        }
+        loadCanonicalTicketHistoryPage(uid, firstPage);
+    }
+
+    private void loadCanonicalTicketHistoryPage(String uid, boolean firstPage) {
+        Query query = FirebaseFirestore.getInstance().collection("user_ticket_history")
+                .whereEqualTo("userId", uid)
+                .orderBy(FieldPath.documentId());
+        loadPagedQuery(query, firstPage, emptyFor(mode),
+                "Kh\u00f4ng \u0111\u1ecdc \u0111\u01b0\u1ee3c d\u1eef li\u1ec7u v\u00e9.",
+                this::ticketItem,
+                firstPage ? this::loadTicketsLegacy : null);
+    }
+
+    private void seedLegacyTicketHistory(String uid, Runnable done) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        java.util.concurrent.atomic.AtomicInteger pending = new java.util.concurrent.atomic.AtomicInteger(2);
+        Set<String> seededIds = new HashSet<>();
+        seedLegacyTicketHistoryCollection(db, "bookings", uid, seededIds, pending, done);
+        seedLegacyTicketHistoryCollection(db, "ticket_orders", uid, seededIds, pending, done);
+    }
+
+    private void seedLegacyTicketHistoryCollection(FirebaseFirestore db, String collection, String uid,
+                                                   Set<String> seededIds,
+                                                   java.util.concurrent.atomic.AtomicInteger pending,
+                                                   Runnable done) {
+        db.collection(collection).whereEqualTo("userId", uid).get().addOnCompleteListener(task -> {
+            if (binding != null && task.isSuccessful() && task.getResult() != null) {
+                for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    if (seededIds.add(doc.getId())) {
+                        LegacyFirestoreCleanup.normalizeTicketOrderEverywhere(doc);
+                        com.google.android.gms.tasks.Task<Void> writeTask = seedTicketHistoryDoc(doc);
+                        if (writeTask != null) {
+                            pending.incrementAndGet();
+                            writeTask.addOnCompleteListener(ignored -> finishLegacyTicketSeed(pending, done));
+                        }
+                    }
+                }
+            }
+            finishLegacyTicketSeed(pending, done);
+        });
+    }
+
+    private void finishLegacyTicketSeed(java.util.concurrent.atomic.AtomicInteger pending, Runnable done) {
+        if (pending.decrementAndGet() == 0 && binding != null) done.run();
+    }
+
+    private void loadPredictionTicketsPage(boolean firstPage) {
+        String uid = AuthSession.uid(requireContext());
+        if (uid == null || uid.isEmpty()) {
+            showItems(new ArrayList<>(), emptyFor(mode));
+            return;
+        }
+        if (firstPage) showLoading();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("user_predictions").whereEqualTo("userId", uid).get()
+                .addOnCompleteListener(predTask -> {
+                    if (binding == null) return;
+                    Map<String, DocumentSnapshot> predictions = new HashMap<>();
+                    if (predTask.isSuccessful() && predTask.getResult() != null) {
+                        for (DocumentSnapshot doc : predTask.getResult().getDocuments()) {
+                            String bookingId = first(doc, "bookingId", "orderId");
+                            if (!bookingId.isEmpty()) predictions.put(bookingId, doc);
+                        }
+                    }
+                    Query query = db.collection("user_ticket_history")
+                            .whereEqualTo("userId", uid)
+                            .orderBy(FieldPath.documentId());
+                    loadPagedQuery(query, firstPage,
+                            "B\u1ea1n ch\u01b0a c\u00f3 v\u00e9 n\u00e0o \u0111\u1ec3 d\u1ef1 \u0111o\u00e1n.",
+                            "Kh\u00f4ng \u0111\u1ecdc \u0111\u01b0\u1ee3c d\u1eef li\u1ec7u d\u1ef1 \u0111o\u00e1n.",
+                            doc -> predictionTicketItem(doc, predictions.get(doc.getId())),
+                            firstPage ? this::loadPredictionTicketsLegacy : null);
+                });
+    }
+
     private void loadTickets() {
+        loadTicketHistoryPage(true);
+    }
+
+    private void loadTicketsLegacy() {
         showLoading();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         List<ProfileHistoryItem> items = new ArrayList<>();
@@ -145,6 +274,7 @@ public class ProfileHistoryFragment extends Fragment {
                     if (firstTask.isSuccessful() && firstTask.getResult() != null) {
                         for (DocumentSnapshot doc : firstTask.getResult().getDocuments()) {
                             LegacyFirestoreCleanup.normalizeTicketOrderEverywhere(doc);
+                            seedTicketHistoryDoc(doc);
                             items.add(ticketItem(doc));
                         }
                     }
@@ -157,6 +287,7 @@ public class ProfileHistoryFragment extends Fragment {
                                 if (secondTask.isSuccessful() && secondTask.getResult() != null) {
                                     for (DocumentSnapshot doc : secondTask.getResult().getDocuments()) {
                                         LegacyFirestoreCleanup.normalizeTicketOrderEverywhere(doc);
+                                        seedTicketHistoryDoc(doc);
                                         if (!ids.contains(doc.getId())) items.add(ticketItem(doc));
                                     }
                                 }
@@ -166,33 +297,53 @@ public class ProfileHistoryFragment extends Fragment {
     }
 
     private void loadNotifications() {
+        loadNotificationsOptimized();
+    }
+
+    private void loadNotificationsOptimized() {
         showLoading();
         String uid = AuthSession.uid(requireContext());
-        FirebaseFirestore.getInstance().collection("notifications").get()
-                .addOnCompleteListener(task -> {
-                    if (binding == null) return;
-                    hideLoading();
-                    if (!task.isSuccessful() || task.getResult() == null) {
-                        showEmpty("Không đọc được thông báo.");
-                        return;
+        if (uid == null || uid.isEmpty()) {
+            hideLoading();
+            showItems(new ArrayList<>(), emptyFor(mode));
+            return;
+        }
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        List<ProfileHistoryItem> items = new ArrayList<>();
+        Set<String> ids = new HashSet<>();
+        java.util.concurrent.atomic.AtomicInteger pending = new java.util.concurrent.atomic.AtomicInteger(2);
+        collectNotificationItems(db.collection("notifications").whereEqualTo("userId", uid), items, ids, pending);
+        collectNotificationItems(db.collection("notifications")
+                .whereIn("targetRole", java.util.Arrays.asList("all", "user", "ng\u01b0\u1eddi d\u00f9ng")), items, ids, pending);
+    }
+
+    private void collectNotificationItems(Query query, List<ProfileHistoryItem> items, Set<String> ids,
+                                          java.util.concurrent.atomic.AtomicInteger pending) {
+        String uid = AuthSession.uid(requireContext());
+        query.get().addOnCompleteListener(task -> {
+            if (binding == null) return;
+            if (task.isSuccessful() && task.getResult() != null) {
+                for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    if (ids.add(doc.getId())) {
+                        if (NotificationReadStore.isUnread(doc, uid)) {
+                            NotificationReadStore.markRead(doc, uid);
+                        }
+                        items.add(notificationItem(doc, false));
                     }
-                    List<ProfileHistoryItem> items = new ArrayList<>();
-                    for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-                        String userId = first(doc, "userId");
-                        String targetRole = first(doc, "targetRole", "target");
-                        boolean forMe = uid != null && uid.equals(userId);
-                        boolean broadcast = userId.isEmpty()
-                                && (targetRole.isEmpty()
-                                || "all".equalsIgnoreCase(targetRole)
-                                || "user".equalsIgnoreCase(targetRole)
-                                || "người dùng".equalsIgnoreCase(targetRole));
-                        if (forMe || broadcast) items.add(notificationItem(doc));
-                    }
-                    showItems(items, emptyFor(mode));
-                });
+                }
+            }
+            if (pending.decrementAndGet() == 0) {
+                hideLoading();
+                showItems(items, emptyFor(mode));
+            }
+        });
     }
 
     private void loadPredictionTickets() {
+        loadPredictionTicketsPage(true);
+    }
+
+    private void loadPredictionTicketsLegacy() {
         showLoading();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String uid = AuthSession.uid(requireContext());
@@ -214,6 +365,7 @@ public class ProfileHistoryFragment extends Fragment {
                                 if (ticketTask.isSuccessful() && ticketTask.getResult() != null) {
                                     for (DocumentSnapshot doc : ticketTask.getResult().getDocuments()) {
                                         LegacyFirestoreCleanup.normalizeTicketOrderEverywhere(doc);
+                                        seedTicketHistoryDoc(doc);
                                         ids.add(doc.getId());
                                         items.add(predictionTicketItem(doc, predictions.get(doc.getId())));
                                     }
@@ -225,6 +377,7 @@ public class ProfileHistoryFragment extends Fragment {
                                             if (oldTicketTask.isSuccessful() && oldTicketTask.getResult() != null) {
                                                 for (DocumentSnapshot doc : oldTicketTask.getResult().getDocuments()) {
                                                     LegacyFirestoreCleanup.normalizeTicketOrderEverywhere(doc);
+                                                    seedTicketHistoryDoc(doc);
                                                     if (ids.contains(doc.getId())) continue;
                                                     items.add(predictionTicketItem(doc, predictions.get(doc.getId())));
                                                 }
@@ -236,36 +389,7 @@ public class ProfileHistoryFragment extends Fragment {
     }
 
     private void loadOrders() {
-        showLoading();
-        FirebaseFirestore.getInstance().collection("orders")
-                .whereEqualTo("userId", AuthSession.uid(requireContext()))
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (binding == null) return;
-                    hideLoading();
-                    if (!task.isSuccessful() || task.getResult() == null) {
-                        showEmpty("Không đọc được đơn hàng.");
-                        return;
-                    }
-                    List<ProfileHistoryItem> items = new ArrayList<>();
-                    for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-                        LegacyFirestoreCleanup.normalizeOrderDocument("orders", doc);
-                        String orderCode = first(doc, "orderCode", "orderId");
-                        String status = LegacyFirestoreCleanup.normalizeOrderStatus(first(doc, "status", "orderStatus"));
-                        int total = orderTotal(doc);
-                        items.add(new ProfileHistoryItem(
-                                doc.getId(),
-                                "Đơn hàng #" + safe(orderCode, doc.getId()),
-                                displayStatus(safe(status, "pending")) + " · " + dateText(doc),
-                                CartStore.formatVnd(total),
-                                R.drawable.ic_receipt_24,
-                                R.drawable.bg_history_icon_order,
-                                R.color.red_energy,
-                                R.drawable.bg_profile_panel_dark,
-                                R.color.red_energy));
-                    }
-                    showItems(items, "Bạn chưa có đơn hàng.");
-                });
+        loadOrdersPage(true);
     }
 
     private void loadLoyalty() {
@@ -296,44 +420,11 @@ public class ProfileHistoryFragment extends Fragment {
     }
 
     private void loadCollection(String collection, String emptyText, Mapper mapper) {
-        showLoading();
-        FirebaseFirestore.getInstance().collection(collection)
-                .whereEqualTo("userId", AuthSession.uid(requireContext()))
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (binding == null) return;
-                    hideLoading();
-                    if (!task.isSuccessful() || task.getResult() == null) {
-                        showEmpty("Không đọc được dữ liệu " + titleFor(mode).toLowerCase(Locale.ROOT) + ".");
-                        return;
-                    }
-                    List<ProfileHistoryItem> items = new ArrayList<>();
-                    for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-                        items.add(mapper.map(doc));
-                    }
-                    showItems(items, emptyText);
-                });
+        loadCollectionPage(collection, emptyText, mapper, true);
     }
 
     private void loadActiveBadges() {
-        showLoading();
-        FirebaseFirestore.getInstance().collection("user_badges")
-                .whereEqualTo("userId", AuthSession.uid(requireContext()))
-                .whereEqualTo("status", "active")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (binding == null) return;
-                    hideLoading();
-                    if (!task.isSuccessful() || task.getResult() == null) {
-                        showEmpty("Không đọc được dữ liệu huy hiệu.");
-                        return;
-                    }
-                    List<ProfileHistoryItem> items = new ArrayList<>();
-                    for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-                        items.add(badgeItem(doc));
-                    }
-                    showItems(items, emptyFor(mode));
-                });
+        loadActiveBadgesPage(true);
     }
 
     private ProfileHistoryItem ticketItem(DocumentSnapshot doc) {
@@ -350,6 +441,17 @@ public class ProfileHistoryFragment extends Fragment {
                 R.color.badge_platinum,
                 R.drawable.bg_profile_panel_dark,
                 R.color.red_energy);
+    }
+
+    private com.google.android.gms.tasks.Task<Void> seedTicketHistoryDoc(DocumentSnapshot doc) {
+        if (doc == null || !doc.exists() || doc.getData() == null) return null;
+        Map<String, Object> data = new HashMap<>(doc.getData());
+        data.put("userId", AuthSession.uid(requireContext()));
+        data.put("type", "ticket");
+        data.put("updatedAt", FieldValue.serverTimestamp());
+        return FirebaseFirestore.getInstance().collection("user_ticket_history")
+                .document(doc.getId())
+                .set(data, SetOptions.merge());
     }
 
     private ProfileHistoryItem predictionItem(DocumentSnapshot doc) {
@@ -400,13 +502,17 @@ public class ProfileHistoryFragment extends Fragment {
     }
 
     private ProfileHistoryItem notificationItem(DocumentSnapshot doc) {
+        return notificationItem(doc, NotificationReadStore.isUnread(doc, AuthSession.uid(requireContext())));
+    }
+
+    private ProfileHistoryItem notificationItem(DocumentSnapshot doc, boolean showUnreadBadge) {
         String title = first(doc, "title", "name", "message");
         String body = first(doc, "body", "description", "content");
         return new ProfileHistoryItem(
                 doc.getId(),
                 title.isEmpty() ? "Thông báo" : title,
                 (body.isEmpty() ? displayStatus(first(doc, "type", "status")) : body) + " · " + dateText(doc),
-                first(doc, "status").equals("unread") ? "Mới" : "",
+                showUnreadBadge ? "Mới" : "",
                 R.drawable.notifications_active_24,
                 R.drawable.bg_history_icon_ticket,
                 R.color.badge_platinum,
@@ -566,9 +672,120 @@ public class ProfileHistoryFragment extends Fragment {
         });
     }
 
+    private void loadOrdersPage(boolean firstPage) {
+        String uid = AuthSession.uid(requireContext());
+        if (uid == null || uid.isEmpty()) {
+            showItems(new ArrayList<>(), emptyFor(mode));
+            return;
+        }
+        if (firstPage && !invalidShopOrdersCleaned) {
+            showLoading();
+            LegacyFirestoreCleanup.deleteInvalidShopOrdersForUser(uid, () -> {
+                invalidShopOrdersCleaned = true;
+                loadOrdersPage(true);
+            });
+            return;
+        }
+        Query query = FirebaseFirestore.getInstance().collection("orders")
+                .whereEqualTo("userId", uid)
+                .orderBy(FieldPath.documentId());
+        loadPagedQuery(query, firstPage,
+                "B\u1ea1n ch\u01b0a c\u00f3 \u0111\u01a1n h\u00e0ng.",
+                "Kh\u00f4ng \u0111\u1ecdc \u0111\u01b0\u1ee3c \u0111\u01a1n h\u00e0ng.",
+                doc -> {
+                    LegacyFirestoreCleanup.normalizeOrderDocument("orders", doc);
+                    String orderCode = first(doc, "orderCode", "orderId");
+                    String status = LegacyFirestoreCleanup.normalizeOrderStatus(first(doc, "status", "orderStatus"));
+                    int total = orderTotal(doc);
+                    return new ProfileHistoryItem(
+                            doc.getId(),
+                            "\u0110\u01a1n h\u00e0ng #" + safe(orderCode, doc.getId()),
+                            displayStatus(safe(status, "pending")) + " \u00b7 " + dateText(doc),
+                            CartStore.formatVnd(total),
+                            R.drawable.ic_receipt_24,
+                            R.drawable.bg_history_icon_order,
+                            R.color.red_energy,
+                            R.drawable.bg_profile_panel_dark,
+                            R.color.red_energy);
+                });
+    }
+
+    private void loadCollectionPage(String collection, String emptyText, Mapper mapper, boolean firstPage) {
+        Query query = FirebaseFirestore.getInstance().collection(collection)
+                .whereEqualTo("userId", AuthSession.uid(requireContext()))
+                .orderBy(FieldPath.documentId());
+        loadPagedQuery(query, firstPage, emptyText,
+                "Kh\u00f4ng \u0111\u1ecdc \u0111\u01b0\u1ee3c d\u1eef li\u1ec7u " + titleFor(mode).toLowerCase(Locale.ROOT) + ".",
+                mapper);
+    }
+
+    private void loadActiveBadgesPage(boolean firstPage) {
+        Query query = FirebaseFirestore.getInstance().collection("user_badges")
+                .whereEqualTo("userId", AuthSession.uid(requireContext()))
+                .whereEqualTo("status", "active")
+                .orderBy(FieldPath.documentId());
+        loadPagedQuery(query, firstPage, emptyFor(mode),
+                "Kh\u00f4ng \u0111\u1ecdc \u0111\u01b0\u1ee3c d\u1eef li\u1ec7u huy hi\u1ec7u.",
+                this::badgeItem);
+    }
+
+    private void loadPagedQuery(Query baseQuery, boolean firstPage, String emptyText,
+                                String errorText, Mapper mapper) {
+        loadPagedQuery(baseQuery, firstPage, emptyText, errorText, mapper, null);
+    }
+
+    private void loadPagedQuery(Query baseQuery, boolean firstPage, String emptyText,
+                                String errorText, Mapper mapper, Runnable emptyFirstPageFallback) {
+        if (binding == null || loadingHistoryPage) return;
+        if (firstPage) {
+            resetHistoryPaging();
+            showLoading();
+        }
+        Query query = baseQuery.limit(HISTORY_PAGE_SIZE);
+        if (!firstPage && lastHistoryDoc != null) {
+            query = query.startAfter(lastHistoryDoc);
+        }
+        loadingHistoryPage = true;
+        updateLoadMoreButton();
+        query.get().addOnCompleteListener(task -> {
+            if (binding == null) return;
+            loadingHistoryPage = false;
+            hideLoading();
+            if (!task.isSuccessful() || task.getResult() == null) {
+                if (firstPage && emptyFirstPageFallback != null && pagedItems.isEmpty()) {
+                    emptyFirstPageFallback.run();
+                    return;
+                }
+                if (pagedItems.isEmpty()) showEmpty(errorText);
+                else {
+                    toast("Kh\u00f4ng t\u1ea3i th\u00eam \u0111\u01b0\u1ee3c d\u1eef li\u1ec7u.");
+                    updateLoadMoreButton();
+                }
+                return;
+            }
+            List<DocumentSnapshot> docs = task.getResult().getDocuments();
+            if (docs.isEmpty()) {
+                if (firstPage && emptyFirstPageFallback != null && pagedItems.isEmpty()) {
+                    emptyFirstPageFallback.run();
+                    return;
+                }
+                hasMoreHistory = false;
+                showItems(pagedItems, emptyText);
+                return;
+            }
+            lastHistoryDoc = docs.get(docs.size() - 1);
+            hasMoreHistory = docs.size() == HISTORY_PAGE_SIZE;
+            for (DocumentSnapshot doc : docs) {
+                pagedItems.add(mapper.map(doc));
+            }
+            showItems(pagedItems, emptyText);
+        });
+    }
+
     private void showLoading() {
         binding.progressHistory.setVisibility(View.VISIBLE);
         binding.tvHistoryEmpty.setVisibility(View.GONE);
+        binding.btnLoadMore.setVisibility(View.GONE);
         adapter.submitList(new ArrayList<>());
     }
 
@@ -577,15 +794,25 @@ public class ProfileHistoryFragment extends Fragment {
     }
 
     private void showItems(List<ProfileHistoryItem> items, String emptyText) {
-        adapter.submitList(items);
+        adapter.submitList(new ArrayList<>(items));
         binding.tvHistoryEmpty.setVisibility(items.isEmpty() ? View.VISIBLE : View.GONE);
         if (items.isEmpty()) binding.tvHistoryEmpty.setText(emptyText);
+        updateLoadMoreButton();
     }
 
     private void showEmpty(String text) {
         adapter.submitList(new ArrayList<>());
         binding.tvHistoryEmpty.setText(text);
         binding.tvHistoryEmpty.setVisibility(View.VISIBLE);
+        binding.btnLoadMore.setVisibility(View.GONE);
+    }
+
+    private void updateLoadMoreButton() {
+        if (binding == null) return;
+        boolean visible = !pagedItems.isEmpty() && (hasMoreHistory || loadingHistoryPage);
+        binding.btnLoadMore.setVisibility(visible ? View.VISIBLE : View.GONE);
+        binding.btnLoadMore.setEnabled(!loadingHistoryPage);
+        binding.btnLoadMore.setText(loadingHistoryPage ? "\u0110ANG T\u1ea2I..." : "T\u1ea2I TH\u00caM");
     }
 
     private String titleFor(String mode) {

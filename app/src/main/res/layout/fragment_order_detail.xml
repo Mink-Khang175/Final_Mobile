@@ -22,7 +22,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/bg_header_action"
-            android:contentDescription="Quay lại"
+            android:contentDescription="Quay l&#7841;i"
             android:padding="14dp"
             android:src="@drawable/ic_arrow_left_24"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -38,7 +38,7 @@
             android:fontFamily="sans-serif-condensed"
             android:includeFontPadding="false"
             android:letterSpacing="0"
-            android:text="Chi tiết đơn hàng"
+            android:text="Chi ti&#7871;t &#273;&#417;n h&#224;ng"
             android:textColor="@color/stadium_ink"
             android:textSize="22sp"
             android:textStyle="bold|italic"
@@ -74,7 +74,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/orderDetailTopBar"
-        tools:text="Không tìm thấy đơn hàng."
+        tools:text="Kh&#244;ng t&#236;m th&#7845;y &#273;&#417;n h&#224;ng."
         tools:visibility="visible" />
 
     <androidx.core.widget.NestedScrollView
@@ -131,7 +131,7 @@
                             android:textColor="@color/stadium_ink"
                             android:textSize="11sp"
                             android:textStyle="bold"
-                            tools:text="Chờ xác nhận" />
+                            tools:text="Ch&#7901; x&#225;c nh&#7853;n" />
 
                         <TextView
                             android:id="@+id/tvOrderTotal"
@@ -143,14 +143,14 @@
                             android:textColor="@color/white"
                             android:textSize="19sp"
                             android:textStyle="bold"
-                            tools:text="870.000đ" />
+                            tools:text="870.000&#273;" />
                     </LinearLayout>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
-                        android:text="MÃ ĐƠN HÀNG"
+                        android:text="M&#195; &#272;&#416;N H&#192;NG"
                         android:textColor="@color/white_alpha_60"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -165,7 +165,7 @@
                         android:textColor="@color/white"
                         android:textSize="19sp"
                         android:textStyle="bold"
-                        tools:text="Đơn #TICKET1783350601613" />
+                        tools:text="&#272;&#417;n #TICKET1783350601613" />
 
                     <TextView
                         android:id="@+id/tvOrderDate"
@@ -174,7 +174,7 @@
                         android:layout_marginTop="8dp"
                         android:textColor="@color/white_alpha_80"
                         android:textSize="13sp"
-                        tools:text="Đặt lúc 06/07/2026 22:10" />
+                        tools:text="&#272;&#7863;t l&#250;c 06/07/2026 22:10" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -197,7 +197,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Tiến trình"
+                        android:text="Ti&#7871;n tr&#236;nh"
                         android:textColor="@color/stadium_ink"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -230,7 +230,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Sản phẩm / vé"
+                        android:text="S&#7843;n ph&#7849;m / v&#233;"
                         android:textColor="@color/stadium_ink"
                         android:textSize="17sp"
                         android:textStyle="bold" />
@@ -263,7 +263,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Thông tin nhận hàng"
+                        android:text="Th&#244;ng tin nh&#7853;n h&#224;ng"
                         android:textColor="@color/stadium_ink"
                         android:textSize="17sp"
                         android:textStyle="bold" />
@@ -276,7 +276,7 @@
                         android:textColor="@color/stadium_ink"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        tools:text="Hồ Minh Khang" />
+                        tools:text="H&#7891; Minh Khang" />
 
                     <TextView
                         android:id="@+id/tvCustomerPhone"
@@ -285,7 +285,7 @@
                         android:layout_marginTop="6dp"
                         android:textColor="@color/slate_caption"
                         android:textSize="13sp"
-                        tools:text="Số điện thoại: 0976861309" />
+                        tools:text="S&#7889; &#273;i&#7879;n tho&#7841;i: 0976861309" />
 
                     <TextView
                         android:id="@+id/tvCustomerAddress"
@@ -295,7 +295,30 @@
                         android:lineSpacingExtra="4dp"
                         android:textColor="@color/slate_caption"
                         android:textSize="13sp"
-                        tools:text="Địa chỉ: -" />
+                        tools:text="&#272;&#7883;a ch&#7881;: -" />
+
+                    <TextView
+                        android:id="@+id/tvShippingCarrier"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/stadium_ink"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        tools:text="&#272;&#417;n v&#7883; v&#7853;n chuy&#7875;n: SPX"
+                        tools:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/tvTrackingCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:textColor="@color/slate_caption"
+                        android:textSize="13sp"
+                        android:visibility="gone"
+                        tools:text="M&#227; v&#7853;n &#273;&#417;n: SPX123456789"
+                        tools:visibility="visible" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -318,7 +341,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Thanh toán"
+                        android:text="Thanh to&#225;n"
                         android:textColor="@color/stadium_ink"
                         android:textSize="17sp"
                         android:textStyle="bold" />
@@ -330,7 +353,7 @@
                         android:layout_marginTop="12dp"
                         android:textColor="@color/slate_caption"
                         android:textSize="13sp"
-                        tools:text="Phương thức: Chuyển khoản VietinBank" />
+                        tools:text="Ph&#432;&#417;ng th&#7913;c: Chuy&#7875;n kho&#7843;n VietinBank" />
 
                     <TextView
                         android:id="@+id/tvSubtotal"
@@ -339,7 +362,7 @@
                         android:layout_marginTop="8dp"
                         android:textColor="@color/slate_caption"
                         android:textSize="13sp"
-                        tools:text="Tạm tính: 860.000đ" />
+                        tools:text="T&#7841;m t&#237;nh: 860.000&#273;" />
 
                     <TextView
                         android:id="@+id/tvShippingFee"
@@ -348,7 +371,7 @@
                         android:layout_marginTop="6dp"
                         android:textColor="@color/slate_caption"
                         android:textSize="13sp"
-                        tools:text="Phí dịch vụ: 10.000đ" />
+                        tools:text="Ph&#237; d&#7883;ch v&#7909;: 10.000&#273;" />
 
                     <TextView
                         android:id="@+id/tvFinalTotal"
@@ -358,9 +381,10 @@
                         android:textColor="@color/red_energy"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        tools:text="Tổng thanh toán: 870.000đ" />
+                        tools:text="T&#7893;ng thanh to&#225;n: 870.000&#273;" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
+

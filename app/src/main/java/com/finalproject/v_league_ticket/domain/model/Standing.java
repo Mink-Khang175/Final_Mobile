@@ -45,8 +45,15 @@ public class Standing {
     public int getPoints() { return points; }
 
     public String getLogoUrl() {
-        if (!logoOverrideUrl.isEmpty()) return logoOverrideUrl;
-        return teamId == null ? "" : "https://api.sofascore.app/api/v1/team/" + teamId + "/image";
+        if (!logoOverrideUrl.isEmpty()) return imageUrl(logoOverrideUrl);
+        return teamId == null ? "" : "https://img.sofascore.com/api/v1/team/" + teamId + "/image";
+    }
+
+    private static String imageUrl(String value) {
+        return (value == null ? "" : value)
+                .replace("https://api.sofascore.app/api/v1/", "https://img.sofascore.com/api/v1/")
+                .replace("https://api.sofascore.com/api/v1/", "https://img.sofascore.com/api/v1/")
+                .replace("https://www.sofascore.com/api/v1/", "https://img.sofascore.com/api/v1/");
     }
 
     @Override

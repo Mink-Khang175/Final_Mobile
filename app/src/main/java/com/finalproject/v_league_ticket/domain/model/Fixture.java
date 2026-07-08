@@ -70,13 +70,13 @@ public class Fixture {
     public String getRoundName() { return roundName; }
 
     public String getHomeLogoUrl() {
-        if (!homeLogoOverrideUrl.isEmpty()) return homeLogoOverrideUrl;
-        return homeTeamId == null ? "" : "https://api.sofascore.app/api/v1/team/" + homeTeamId + "/image";
+        if (!homeLogoOverrideUrl.isEmpty()) return imageUrl(homeLogoOverrideUrl);
+        return homeTeamId == null ? "" : "https://img.sofascore.com/api/v1/team/" + homeTeamId + "/image";
     }
 
     public String getAwayLogoUrl() {
-        if (!awayLogoOverrideUrl.isEmpty()) return awayLogoOverrideUrl;
-        return awayTeamId == null ? "" : "https://api.sofascore.app/api/v1/team/" + awayTeamId + "/image";
+        if (!awayLogoOverrideUrl.isEmpty()) return imageUrl(awayLogoOverrideUrl);
+        return awayTeamId == null ? "" : "https://img.sofascore.com/api/v1/team/" + awayTeamId + "/image";
     }
 
     public boolean hasScore() {
@@ -85,6 +85,13 @@ public class Fixture {
 
     private static String safe(String value) {
         return value == null ? "" : value;
+    }
+
+    private static String imageUrl(String value) {
+        return safe(value)
+                .replace("https://api.sofascore.app/api/v1/", "https://img.sofascore.com/api/v1/")
+                .replace("https://api.sofascore.com/api/v1/", "https://img.sofascore.com/api/v1/")
+                .replace("https://www.sofascore.com/api/v1/", "https://img.sofascore.com/api/v1/");
     }
 
     @Override

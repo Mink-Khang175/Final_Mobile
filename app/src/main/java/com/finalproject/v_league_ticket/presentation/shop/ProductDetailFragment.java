@@ -79,6 +79,9 @@ public class ProductDetailFragment extends Fragment {
         inStock = requireArguments().getBoolean(ARG_IN_STOCK, true);
         binding.rvProductImages.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.rvProductImages.setAdapter(imageAdapter);
+        binding.rvProductImages.setHasFixedSize(true);
+        binding.rvProductImages.setItemViewCacheSize(4);
+        binding.rvProductImages.setItemAnimator(null);
         bindProduct();
         setupActions();
     }
@@ -150,7 +153,7 @@ public class ProductDetailFragment extends Fragment {
         binding.btnBuyNow.setText(inStock ? "MUA NGAY" : "HẾT HÀNG");
         binding.btnAddToCart.setAlpha(inStock ? 1f : 0.72f);
         binding.btnBuyNow.setAlpha(inStock ? 1f : 0.72f);
-        imageAdapter.submitList(detail.getImageUrls());
+        imageAdapter.submitList(new java.util.ArrayList<>(detail.getImageUrls()));
     }
 
     private void renderSizes(List<TextView> sizes) {

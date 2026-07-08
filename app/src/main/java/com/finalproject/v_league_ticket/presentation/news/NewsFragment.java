@@ -59,8 +59,11 @@ public class NewsFragment extends Fragment {
     private void setupLists() {
         binding.rvNewsCategories.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.rvNewsCategories.setAdapter(categoryAdapter);
+        binding.rvNewsCategories.setHasFixedSize(true);
+        binding.rvNewsCategories.setItemViewCacheSize(NewsCategory.values().length);
         binding.rvNewsList.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvNewsList.setAdapter(newsAdapter);
+        binding.rvNewsList.setItemAnimator(null);
     }
 
     private void setupClicks() {
@@ -95,7 +98,7 @@ public class NewsFragment extends Fragment {
         binding.rvNewsList.setVisibility(hasContent && newsPosts.size() > 1 ? View.VISIBLE : View.GONE);
         if (hasContent) {
             bindFeatured(newsPosts.get(0));
-            newsAdapter.submitList(newsPosts.subList(1, newsPosts.size()));
+            newsAdapter.submitList(new ArrayList<>(newsPosts.subList(1, newsPosts.size())));
         } else {
             newsAdapter.submitList(Collections.emptyList());
         }

@@ -70,10 +70,16 @@ public class OrderDetailFragment extends Fragment {
                     binding.progressOrder.setVisibility(View.GONE);
                     if (!task.isSuccessful() || task.getResult() == null || !task.getResult().exists()) {
                         binding.tvOrderError.setVisibility(View.VISIBLE);
-                        binding.tvOrderError.setText("Không tìm thấy đơn hàng " + orderId);
+                        binding.tvOrderError.setText("Kh\u00f4ng t\u00ecm th\u1ea5y \u0111\u01a1n h\u00e0ng " + orderId);
                         return;
                     }
                     LegacyFirestoreCleanup.normalizeOrderDocument("orders", task.getResult());
+                    if (LegacyFirestoreCleanup.isInvalidLegacyShopOrder(task.getResult())) {
+                        FirebaseFirestore.getInstance().collection("orders").document(orderId).delete();
+                        binding.tvOrderError.setVisibility(View.VISIBLE);
+                        binding.tvOrderError.setText("\u0110\u01a1n h\u00e0ng c\u0169 n\u00e0y kh\u00f4ng c\u00f3 s\u1ea3n ph\u1ea9m h\u1ee3p l\u1ec7 v\u00e0 \u0111\u00e3 \u0111\u01b0\u1ee3c x\u00f3a.");
+                        return;
+                    }
                     bindOrder(task.getResult());
                 });
     }
@@ -88,51 +94,62 @@ public class OrderDetailFragment extends Fragment {
         int serviceFee = money(doc, "serviceFee");
         int total = orderTotal(doc);
         binding.tvOrderStatus.setText(displayStatus(status));
-        binding.tvOrderCode.setText("Đơn #" + orderCode);
-        binding.tvOrderDate.setText("Đặt lúc " + dateText(doc));
+        binding.tvOrderCode.setText("\u0110\u01a1n #" + orderCode);
+        binding.tvOrderDate.setText("\u0110\u1eb7t l\u00fac " + dateText(doc));
         binding.tvOrderTotal.setText(CartStore.formatVnd(total));
-        binding.tvCustomerName.setText(safe(customerName(doc), "Chưa có tên người nhận"));
-        binding.tvCustomerPhone.setText("Số điện thoại: " + safe(customerPhone(doc), "-"));
-        binding.tvCustomerAddress.setText("Địa chỉ: " + safe(customerAddress(doc), "-"));
-        binding.tvPaymentMethod.setText("Phương thức: " + displayPayment(doc));
-        binding.tvSubtotal.setText("Tạm tính: " + CartStore.formatVnd(subtotal));
+        binding.tvCustomerName.setText(safe(customerName(doc), "Ch\u01b0a c\u00f3 t\u00ean ng\u01b0\u1eddi nh\u1eadn"));
+        binding.tvCustomerPhone.setText("S\u1ed1 \u0111i\u1ec7n tho\u1ea1i: " + safe(customerPhone(doc), "-"));
+        binding.tvCustomerAddress.setText("\u0110\u1ecba ch\u1ec9: " + safe(customerAddress(doc), "-"));
+        bindDeliveryInfo(doc);
+        binding.tvPaymentMethod.setText("Ph\u01b0\u01a1ng th\u1ee9c: " + displayPayment(doc));
+        binding.tvSubtotal.setText("T\u1ea1m t\u00ednh: " + CartStore.formatVnd(subtotal));
         binding.tvShippingFee.setText(feeLabel(doc) + ": " + CartStore.formatVnd(shipping + serviceFee));
-        binding.tvFinalTotal.setText("Tổng thanh toán: " + CartStore.formatVnd(total));
+        binding.tvFinalTotal.setText("T\u1ed5ng thanh to\u00e1n: " + CartStore.formatVnd(total));
         bindTimeline(status);
         bindItems(doc);
+    }
+
+    private void bindDeliveryInfo(DocumentSnapshot doc) {
+        String carrier = safe(first(doc, "shippingCarrier", "carrier", "carrierName"), "");
+        String tracking = safe(first(doc, "trackingCode", "trackingNumber", "shippingTrackingCode"), "");
+        boolean hasDeliveryInfo = !carrier.isEmpty() || !tracking.isEmpty();
+        binding.tvShippingCarrier.setVisibility(hasDeliveryInfo ? View.VISIBLE : View.GONE);
+        binding.tvTrackingCode.setVisibility(tracking.isEmpty() ? View.GONE : View.VISIBLE);
+        binding.tvShippingCarrier.setText("\u0110\u01a1n v\u1ecb v\u1eadn chuy\u1ec3n: " + safe(carrier, "SPX"));
+        binding.tvTrackingCode.setText("M\u00e3 v\u1eadn \u0111\u01a1n: " + tracking);
     }
 
     private void bindItems(DocumentSnapshot doc) {
         binding.layoutItems.removeAllViews();
         Object raw = doc.get("items");
         if (!(raw instanceof List<?>)) {
-            addRow(binding.layoutItems, "Chưa có chi tiết sản phẩm", "", false);
+            addRow(binding.layoutItems, "Ch\u01b0a c\u00f3 chi ti\u1ebft s\u1ea3n ph\u1ea9m", "", false);
             return;
         }
         int index = 1;
         for (Object row : (List<?>) raw) {
             if (!(row instanceof Map<?, ?>)) continue;
             Map<?, ?> map = (Map<?, ?>) row;
-            String name = safe(String.valueOf(map.get("name")), "Sản phẩm " + index);
+            String name = safe(String.valueOf(map.get("name")), "S\u1ea3n ph\u1ea9m " + index);
             String seat = safe(String.valueOf(map.get("seatNumber")), "");
             String size = safe(String.valueOf(map.get("size")), "");
             String quantity = safe(String.valueOf(map.get("quantity")), "1");
             String detail = !seat.isEmpty()
-                    ? "Ghế " + seat + " · " + CartStore.formatVnd(intValue(map.get("unitPrice")))
-                    : (!size.isEmpty() && !"-".equals(size) ? "Size " + size + " · SL " + quantity : "Số lượng " + quantity);
+                    ? "Gh\u1ebf " + seat + " \u00b7 " + CartStore.formatVnd(intValue(map.get("unitPrice")))
+                    : (!size.isEmpty() && !"-".equals(size) ? "Size " + size + " \u00b7 SL " + quantity : "S\u1ed1 l\u01b0\u1ee3ng " + quantity);
             addRow(binding.layoutItems, name, detail, index > 1);
             index++;
         }
-        if (index == 1) addRow(binding.layoutItems, "Chưa có chi tiết sản phẩm", "", false);
+        if (index == 1) addRow(binding.layoutItems, "Ch\u01b0a c\u00f3 chi ti\u1ebft s\u1ea3n ph\u1ea9m", "", false);
     }
 
     private void bindTimeline(String status) {
         binding.layoutTimeline.removeAllViews();
         String normalized = LegacyFirestoreCleanup.normalizeOrderStatus(status).toLowerCase(Locale.ROOT);
-        addStep("Chờ xác nhận thanh toán", isReached(normalized, "pending_payment"), true);
-        addStep("Đã xác nhận", isReached(normalized, "confirmed"), true);
-        addStep("Đang giao / chờ soát vé", isReached(normalized, "shipping"), true);
-        addStep("Hoàn tất", isReached(normalized, "completed"), false);
+        addStep("Ch\u1edd x\u00e1c nh\u1eadn thanh to\u00e1n", isReached(normalized, "pending_payment"), true);
+        addStep("\u0110\u00e3 x\u00e1c nh\u1eadn", isReached(normalized, "confirmed"), true);
+        addStep("\u0110ang giao / ch\u1edd so\u00e1t v\u00e9", isReached(normalized, "shipping"), true);
+        addStep("Ho\u00e0n t\u1ea5t", isReached(normalized, "completed"), false);
     }
 
     private void addStep(String title, boolean active, boolean showDivider) {
@@ -161,7 +178,7 @@ public class OrderDetailFragment extends Fragment {
         primary.setTypeface(primary.getTypeface(), active ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL);
         texts.addView(primary);
         TextView secondary = new TextView(requireContext());
-        secondary.setText(active ? "Đã đạt bước này" : "Đang chờ cập nhật");
+        secondary.setText(active ? "\u0110\u00e3 \u0111\u1ea1t b\u01b0\u1edbc n\u00e0y" : "\u0110ang ch\u1edd c\u1eadp nh\u1eadt");
         secondary.setTextColor(requireContext().getColor(R.color.slate_caption));
         secondary.setTextSize(12f);
         secondary.setPadding(0, dp(2), 0, 0);
@@ -229,15 +246,15 @@ public class OrderDetailFragment extends Fragment {
     private String displayPayment(DocumentSnapshot doc) {
         String method = first(doc, "paymentMethod");
         String provider = first(doc, "paymentProvider");
-        if ("cash_on_delivery".equals(method)) return "Thanh toán khi nhận hàng";
-        if ("momo".equalsIgnoreCase(provider)) return "Chuyển khoản MoMo";
-        if ("vietinbank".equalsIgnoreCase(provider)) return "Chuyển khoản VietinBank";
-        if ("bank_transfer".equals(method)) return "Chuyển khoản";
-        return safe(method, "Chưa cập nhật");
+        if ("cash_on_delivery".equals(method)) return "Thanh to\u00e1n khi nh\u1eadn h\u00e0ng";
+        if ("momo".equalsIgnoreCase(provider)) return "Chuy\u1ec3n kho\u1ea3n MoMo";
+        if ("vietinbank".equalsIgnoreCase(provider)) return "Chuy\u1ec3n kho\u1ea3n VietinBank";
+        if ("bank_transfer".equals(method)) return "Chuy\u1ec3n kho\u1ea3n";
+        return safe(method, "Ch\u01b0a c\u1eadp nh\u1eadt");
     }
 
     private String feeLabel(DocumentSnapshot doc) {
-        return "ticket".equalsIgnoreCase(first(doc, "type")) ? "Phí dịch vụ" : "Phí vận chuyển";
+        return "ticket".equalsIgnoreCase(first(doc, "type")) ? "Ph\u00ed d\u1ecbch v\u1ee5" : "Ph\u00ed v\u1eadn chuy\u1ec3n";
     }
 
     private int intValue(Object value) {
@@ -392,11 +409,11 @@ public class OrderDetailFragment extends Fragment {
         String normalized = LegacyFirestoreCleanup.normalizeOrderStatus(value).toLowerCase(Locale.ROOT);
         switch (normalized) {
             case "pending":
-            case "pending_payment": return "Chờ xác nhận thanh toán";
-            case "confirmed": return "Đã xác nhận";
-            case "shipping": return "Đang giao";
-            case "completed": return "Hoàn tất";
-            case "cancelled": return "Đã hủy";
+            case "pending_payment": return "Ch\u1edd x\u00e1c nh\u1eadn thanh to\u00e1n";
+            case "confirmed": return "\u0110\u00e3 x\u00e1c nh\u1eadn";
+            case "shipping": return "\u0110ang giao";
+            case "completed": return "Ho\u00e0n t\u1ea5t";
+            case "cancelled": return "\u0110\u00e3 h\u1ee7y";
             default: return value == null || value.trim().isEmpty() ? "-" : value.trim();
         }
     }
@@ -405,6 +422,7 @@ public class OrderDetailFragment extends Fragment {
         Object value = doc.get("createdAt");
         if (!(value instanceof Timestamp)) value = doc.get("updatedAt");
         Date date = value instanceof Timestamp ? ((Timestamp) value).toDate() : null;
-        return date == null ? "Chưa có ngày" : new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.US).format(date);
+        return date == null ? "Ch\u01b0a c\u00f3 ng\u00e0y" : new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.US).format(date);
     }
 }
+
