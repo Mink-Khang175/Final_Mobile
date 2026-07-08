@@ -263,7 +263,7 @@
                     android:id="@+id/cardUsers"
                     layout="@layout/item_admin_module_card"
                     android:layout_width="0dp"
-                    android:layout_height="128dp"
+                    android:layout_height="136dp"
                     android:layout_columnWeight="1"
                     android:layout_marginEnd="6dp"
                     android:layout_marginBottom="12dp" />
@@ -272,7 +272,7 @@
                     android:id="@+id/cardOrders"
                     layout="@layout/item_admin_module_card"
                     android:layout_width="0dp"
-                    android:layout_height="128dp"
+                    android:layout_height="136dp"
                     android:layout_columnWeight="1"
                     android:layout_marginStart="6dp"
                     android:layout_marginBottom="12dp" />
@@ -281,7 +281,7 @@
                     android:id="@+id/cardProducts"
                     layout="@layout/item_admin_module_card"
                     android:layout_width="0dp"
-                    android:layout_height="128dp"
+                    android:layout_height="136dp"
                     android:layout_columnWeight="1"
                     android:layout_marginEnd="6dp"
                     android:layout_marginBottom="12dp" />
@@ -290,7 +290,7 @@
                     android:id="@+id/cardDelivery"
                     layout="@layout/item_admin_module_card"
                     android:layout_width="0dp"
-                    android:layout_height="128dp"
+                    android:layout_height="136dp"
                     android:layout_columnWeight="1"
                     android:layout_marginStart="6dp"
                     android:layout_marginBottom="12dp" />
@@ -299,42 +299,42 @@
                     android:id="@+id/cardMissingProducts"
                     layout="@layout/item_admin_module_card"
                     android:layout_width="0dp"
-                    android:layout_height="128dp"
+                    android:layout_height="136dp"
                     android:layout_columnWeight="1"
-                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_marginBottom="12dp" />
 
                 <include
                     android:id="@+id/cardBanners"
                     layout="@layout/item_admin_module_card"
                     android:layout_width="0dp"
-                    android:layout_height="128dp"
+                    android:layout_height="136dp"
                     android:layout_columnWeight="1"
-                    android:layout_marginEnd="6dp"
+                    android:layout_marginStart="6dp"
                     android:layout_marginBottom="12dp" />
 
                 <include
                     android:id="@+id/cardNotifications"
                     layout="@layout/item_admin_module_card"
                     android:layout_width="0dp"
-                    android:layout_height="128dp"
+                    android:layout_height="136dp"
                     android:layout_columnWeight="1"
-                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_marginBottom="12dp" />
 
                 <include
                     android:id="@+id/cardAppSettings"
                     layout="@layout/item_admin_module_card"
                     android:layout_width="0dp"
-                    android:layout_height="128dp"
+                    android:layout_height="136dp"
                     android:layout_columnWeight="1"
-                    android:layout_marginEnd="6dp" />
+                    android:layout_marginStart="6dp" />
 
                 <include
                     android:id="@+id/cardDataSync"
                     layout="@layout/item_admin_module_card"
                     android:layout_width="0dp"
-                    android:layout_height="128dp"
+                    android:layout_height="136dp"
                     android:layout_columnWeight="1"
                     android:layout_marginStart="6dp"
                     android:visibility="gone" />

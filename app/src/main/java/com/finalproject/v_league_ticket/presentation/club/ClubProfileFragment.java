@@ -3,6 +3,7 @@ package com.finalproject.v_league_ticket.presentation.club;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -355,9 +356,19 @@ public class ClubProfileFragment extends Fragment {
             addInfoCard(new String[]{"Trạng thái: Danh sách cầu thủ đang được cập nhật"});
             return;
         }
-        LinearLayout card = sectionCard();
+        GridLayout grid = new GridLayout(requireContext());
+        grid.setColumnCount(2);
+        grid.setUseDefaultMargins(false);
+        binding.contentContainer.addView(grid, new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        LinkedHashMap<String, String> uniqueRows = new LinkedHashMap<>();
         for (String row : rows) {
-            addPlayerRow(card, row);
+            PlayerDisplay player = parsePlayer(row);
+            String key = player.dedupeKey();
+            if (!uniqueRows.containsKey(key)) uniqueRows.put(key, row);
+        }
+        for (String row : uniqueRows.values()) {
+            addPlayerCard(grid, row);
         }
     }
 
@@ -480,12 +491,92 @@ public class ClubProfileFragment extends Fragment {
         name.setTypeface(null, android.graphics.Typeface.BOLD);
         texts.addView(name);
 
-        if (!player.meta.isEmpty()) {
-            TextView meta = new TextView(requireContext());
-            meta.setText(player.meta);
-            meta.setTextColor(requireContext().getColor(R.color.slate_caption));
-            meta.setTextSize(12f);
-            texts.addView(meta);
+        TextView meta = new TextView(requireContext());
+        meta.setText(player.country.isEmpty() ? player.positionText() : player.positionText() + " - " + player.country);
+        meta.setTextColor(requireContext().getColor(R.color.slate_caption));
+        meta.setTextSize(12f);
+        texts.addView(meta);
+    }
+
+    private void addPlayerCard(GridLayout parent, String raw) {
+        PlayerDisplay player = parsePlayer(raw);
+        LinearLayout card = new LinearLayout(requireContext());
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
+        card.setBackgroundResource(R.drawable.bg_home_card_clean);
+        card.setPadding(dp(10), dp(12), dp(10), dp(12));
+        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+        params.width = 0;
+        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
+        params.setMargins(dp(4), dp(5), dp(4), dp(7));
+        parent.addView(card, params);
+
+        android.widget.FrameLayout avatarWrap = new android.widget.FrameLayout(requireContext());
+        avatarWrap.setBackgroundResource(R.drawable.bg_club_detail_item);
+        avatarWrap.setPadding(dp(5), dp(5), dp(5), dp(5));
+        card.addView(avatarWrap, new LinearLayout.LayoutParams(dp(74), dp(74)));
+
+        ImageView avatar = new ImageView(requireContext());
+        avatar.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        avatar.setBackgroundResource(R.drawable.bg_shop_product_image);
+        avatarWrap.addView(avatar, new android.widget.FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        Glide.with(avatar)
+                .load(player.photoUrl.isEmpty() ? null : player.photoUrl)
+                .placeholder(R.drawable.user)
+                .error(R.drawable.user)
+                .centerCrop()
+                .into(avatar);
+
+        TextView number = new TextView(requireContext());
+        number.setText(player.number.isEmpty() ? "--" : player.number);
+        number.setGravity(android.view.Gravity.CENTER);
+        number.setTextColor(requireContext().getColor(R.color.white));
+        number.setTextSize(11f);
+        number.setTypeface(null, android.graphics.Typeface.BOLD);
+        number.setBackgroundResource(R.drawable.bg_home_red_button);
+        android.widget.FrameLayout.LayoutParams numberParams =
+                new android.widget.FrameLayout.LayoutParams(dp(32), dp(24));
+        numberParams.gravity = android.view.Gravity.BOTTOM | android.view.Gravity.END;
+        avatarWrap.addView(number, numberParams);
+
+        TextView name = new TextView(requireContext());
+        name.setText(player.name);
+        name.setTextColor(requireContext().getColor(R.color.stadium_ink));
+        name.setTextSize(13f);
+        name.setTypeface(null, android.graphics.Typeface.BOLD);
+        name.setGravity(android.view.Gravity.CENTER);
+        name.setMaxLines(2);
+        name.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        LinearLayout.LayoutParams nameParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        nameParams.setMargins(0, dp(8), 0, 0);
+        card.addView(name, nameParams);
+
+        TextView position = new TextView(requireContext());
+        position.setText(player.positionText());
+        position.setTextColor(clubMeta == null ? requireContext().getColor(R.color.red_energy) : clubMeta.primaryColorInt());
+        position.setTextSize(11f);
+        position.setTypeface(null, android.graphics.Typeface.BOLD);
+        position.setGravity(android.view.Gravity.CENTER);
+        position.setMaxLines(1);
+        position.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        card.addView(position, new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        if (!player.country.isEmpty()) {
+            TextView country = new TextView(requireContext());
+            country.setText(player.country);
+            country.setTextColor(requireContext().getColor(R.color.slate_caption));
+            country.setTextSize(10f);
+            country.setGravity(android.view.Gravity.CENTER);
+            country.setMaxLines(1);
+            country.setEllipsize(android.text.TextUtils.TruncateAt.END);
+            LinearLayout.LayoutParams countryParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            countryParams.setMargins(0, dp(3), 0, 0);
+            card.addView(country, countryParams);
         }
     }
 
@@ -627,35 +718,89 @@ public class ClubProfileFragment extends Fragment {
 
     private PlayerDisplay parsePlayer(String raw) {
         String text = raw == null ? "" : raw.trim();
+        if (text.startsWith("player|")) {
+            Map<String, String> fields = parsePipeFields(text);
+            String name = fields.containsKey("name") ? fields.get("name") : text;
+            String shirt = fields.containsKey("shirt") ? fields.get("shirt") : "";
+            String position = fields.containsKey("pos") ? fields.get("pos") : "";
+            String country = fields.containsKey("country") ? fields.get("country") : "";
+            String photo = fields.containsKey("photo") ? fields.get("photo") : "";
+            return new PlayerDisplay(name, shirt, position, country, photo);
+        }
         String number = "";
         String name = text;
-        String meta = "";
+        String position = "";
+        String country = "";
         int hash = text.indexOf('#');
         if (hash >= 0) {
             name = text.substring(0, hash).trim();
             int end = text.indexOf(" - ", hash);
             String numberPart = end >= 0 ? text.substring(hash + 1, end) : text.substring(hash + 1);
             number = numberPart.trim();
-            if (end >= 0) meta = text.substring(end + 3).trim();
+            if (end >= 0) {
+                String[] parts = text.substring(end + 3).split(" - ", 2);
+                position = parts.length > 0 ? parts[0].trim() : "";
+                country = parts.length > 1 ? parts[1].trim() : "";
+            }
         } else {
             int split = text.indexOf(" - ");
             if (split >= 0) {
                 name = text.substring(0, split).trim();
-                meta = text.substring(split + 3).trim();
+                String[] parts = text.substring(split + 3).split(" - ", 2);
+                position = parts.length > 0 ? parts[0].trim() : "";
+                country = parts.length > 1 ? parts[1].trim() : "";
             }
         }
-        return new PlayerDisplay(name.isEmpty() ? text : name, number, meta);
+        return new PlayerDisplay(name.isEmpty() ? text : name, number, position, country, "");
+    }
+
+    private Map<String, String> parsePipeFields(String raw) {
+        Map<String, String> fields = new HashMap<>();
+        String[] parts = raw.split("\\|");
+        for (String part : parts) {
+            int index = part.indexOf('=');
+            if (index <= 0) continue;
+            fields.put(part.substring(0, index), part.substring(index + 1));
+        }
+        return fields;
     }
 
     private static final class PlayerDisplay {
         final String name;
         final String number;
-        final String meta;
+        final String position;
+        final String country;
+        final String photoUrl;
 
-        PlayerDisplay(String name, String number, String meta) {
+        PlayerDisplay(String name, String number, String position, String country, String photoUrl) {
             this.name = name == null ? "" : name;
             this.number = number == null ? "" : number;
-            this.meta = meta == null ? "" : meta;
+            this.position = position == null ? "" : position;
+            this.country = country == null ? "" : country;
+            this.photoUrl = photoUrl == null ? "" : photoUrl;
+        }
+
+        String positionText() {
+            String key = position.trim().toUpperCase(Locale.ROOT);
+            switch (key) {
+                case "G":
+                case "GK":
+                case "GOALKEEPER": return "Thủ môn";
+                case "D":
+                case "DF":
+                case "DEFENDER": return "Hậu vệ";
+                case "M":
+                case "MF":
+                case "MIDFIELDER": return "Tiền vệ";
+                case "F":
+                case "FW":
+                case "FORWARD": return "Tiền đạo";
+                default: return position.isEmpty() ? "Đang cập nhật vị trí" : position;
+            }
+        }
+
+        String dedupeKey() {
+            return (name + "|" + number).trim().toLowerCase(Locale.ROOT);
         }
     }
 

@@ -207,9 +207,9 @@ public class AdminDashboardFragment extends Fragment {
             int count = counts.containsKey(normalize(club)) ? counts.get(normalize(club)) : 0;
             if (count == 0) {
                 missingCount++;
-                missing.append(club).append(": ch\u01b0a c\u00f3 s\u1ea3n ph\u1ea9m\\n");
+                missing.append(club).append(": ch\u01b0a c\u00f3 s\u1ea3n ph\u1ea9m\n");
             } else if (count <= 2) {
-                missing.append(club).append(": ").append(count).append(" s\u1ea3n ph\u1ea9m - c\u1ea7n b\u1ed5 sung\\n");
+                missing.append(club).append(": ").append(count).append(" s\u1ea3n ph\u1ea9m - c\u1ea7n b\u1ed5 sung\n");
             }
         }
         binding.cardMissingProducts.tvModuleBadge.setText(String.valueOf(missingCount));

@@ -747,38 +747,38 @@ public class AdminModuleDetailFragment extends Fragment {
         switch (module) {
             case MODULE_USERS:
                 return "Vai tr\u00f2: " + displayValue(safe(first(doc, "role"), "user"))
-                        + "\\nTr\u1ea1ng th\u00e1i: " + displayValue(safe(first(doc, "status"), "active"))
-                        + "\\nT\u00ean: " + safe(first(doc, "username", "displayName"), "-");
+                        + "\nTr\u1ea1ng th\u00e1i: " + displayValue(safe(first(doc, "status"), "active"))
+                        + "\nT\u00ean: " + safe(first(doc, "username", "displayName"), "-");
             case MODULE_ORDERS:
                 return "Kh\u00e1ch h\u00e0ng: " + safe(customerName(doc), "-")
-                        + "\\nS\u0110T: " + safe(customerPhone(doc), "-")
-                        + "\\n\u0110\u1ecba ch\u1ec9/\u0111i\u1ec3m nh\u1eadn: " + safe(customerAddress(doc), "-")
-                        + "\\nThanh to\u00e1n: " + displayValue(safe(first(doc, "paymentMethod"), "-"))
-                        + "\\nT\u1ed5ng ti\u1ec1n: " + CartStore.formatVnd(orderTotal(doc))
-                        + "\\nTr\u1ea1ng th\u00e1i: " + displayValue(safe(LegacyFirestoreCleanup.normalizeOrderStatus(first(doc, "status", "orderStatus")), "pending"));
+                        + "\nS\u0110T: " + safe(customerPhone(doc), "-")
+                        + "\n\u0110\u1ecba ch\u1ec9/\u0111i\u1ec3m nh\u1eadn: " + safe(customerAddress(doc), "-")
+                        + "\nThanh to\u00e1n: " + displayValue(safe(first(doc, "paymentMethod"), "-"))
+                        + "\nT\u1ed5ng ti\u1ec1n: " + CartStore.formatVnd(orderTotal(doc))
+                        + "\nTr\u1ea1ng th\u00e1i: " + displayValue(safe(LegacyFirestoreCleanup.normalizeOrderStatus(first(doc, "status", "orderStatus")), "pending"));
             case MODULE_DELIVERY:
                 return "Kh\u00e1ch h\u00e0ng: " + safe(customerName(doc), "-")
-                        + "\\nS\u0110T: " + safe(customerPhone(doc), "-")
-                        + "\\n\u0110\u1ecba ch\u1ec9: " + safe(customerAddress(doc), "-")
-                        + "\\nGiai \u0111o\u1ea1n: " + deliveryStage(doc)
-                        + "\\n\u0110\u01a1n v\u1ecb v\u1eadn chuy\u1ec3n: " + safe(first(doc, "shippingCarrier", "carrier", "carrierName"), "SPX")
-                        + "\\nM\u00e3 v\u1eadn \u0111\u01a1n: " + safe(first(doc, "trackingCode", "trackingNumber", "shippingTrackingCode"), "Ch\u01b0a nh\u1eadp")
-                        + "\\nTr\u1ea1ng th\u00e1i giao: " + displayValue(safe(first(doc, "deliveryStatus", "shippingStatus", "status"), "pending"));
+                        + "\nS\u0110T: " + safe(customerPhone(doc), "-")
+                        + "\n\u0110\u1ecba ch\u1ec9: " + safe(customerAddress(doc), "-")
+                        + "\nGiai \u0111o\u1ea1n: " + deliveryStage(doc)
+                        + "\n\u0110\u01a1n v\u1ecb v\u1eadn chuy\u1ec3n: " + safe(first(doc, "shippingCarrier", "carrier", "carrierName"), "SPX")
+                        + "\nM\u00e3 v\u1eadn \u0111\u01a1n: " + safe(first(doc, "trackingCode", "trackingNumber", "shippingTrackingCode"), "Ch\u01b0a nh\u1eadp")
+                        + "\nTr\u1ea1ng th\u00e1i giao: " + displayValue(safe(first(doc, "deliveryStatus", "shippingStatus", "status"), "pending"));
             case MODULE_PRODUCTS:
                 return "CLB: " + safe(first(doc, "clubName", "club", "teamName"), "-")
-                        + "\\nDanh m\u1ee5c: " + safe(first(doc, "category"), "\u00c1o \u0111\u1ea5u")
-                        + "\\nGi\u00e1: " + safe(first(doc, "priceText", "formattedPrice", "price"), "-")
-                        + "\\nCh\u1ea5t l\u01b0\u1ee3ng: " + productQuality(doc)
-                        + "\\nHi\u1ec3n th\u1ecb: " + (Boolean.TRUE.equals(doc.getBoolean("hidden")) ? "\u0110ang \u1ea9n" : "\u0110ang hi\u1ec7n");
+                        + "\nDanh m\u1ee5c: " + safe(first(doc, "category"), "\u00c1o \u0111\u1ea5u")
+                        + "\nGi\u00e1: " + safe(first(doc, "priceText", "formattedPrice", "price"), "-")
+                        + "\nCh\u1ea5t l\u01b0\u1ee3ng: " + productQuality(doc)
+                        + "\nHi\u1ec3n th\u1ecb: " + (Boolean.TRUE.equals(doc.getBoolean("hidden")) ? "\u0110ang \u1ea9n" : "\u0110ang hi\u1ec7n");
             case MODULE_BANNERS:
                 return "\u0110ang b\u1eadt: " + String.valueOf(!Boolean.FALSE.equals(doc.getBoolean("enabled")))
-                        + "\\nM\u00f4 t\u1ea3: " + safe(first(doc, "subtitle", "description"), "-");
+                        + "\nM\u00f4 t\u1ea3: " + safe(first(doc, "subtitle", "description"), "-");
             case MODULE_NOTIFICATIONS:
                 return notificationSummary(doc);
             case MODULE_SETTINGS:
                 return "M\u00f9a gi\u1ea3i: " + safe(first(doc, "season", "currentSeason"), "-")
-                        + "\\nPh\u00ed v\u1eadn chuy\u1ec3n: " + safe(first(doc, "shippingFee"), "0")
-                        + "\\n\u0110\u1eb7t h\u00e0ng: " + (Boolean.FALSE.equals(doc.getBoolean("ordersEnabled")) ? "\u0110ang t\u1eaft" : "\u0110ang b\u1eadt");
+                        + "\nPh\u00ed v\u1eadn chuy\u1ec3n: " + safe(first(doc, "shippingFee"), "0")
+                        + "\n\u0110\u1eb7t h\u00e0ng: " + (Boolean.FALSE.equals(doc.getBoolean("ordersEnabled")) ? "\u0110ang t\u1eaft" : "\u0110ang b\u1eadt");
             default:
                 return "D\u1eef li\u1ec7u \u0111\u00e3 s\u1eb5n s\u00e0ng.";
         }
@@ -903,9 +903,9 @@ public class AdminModuleDetailFragment extends Fragment {
         String type = safe(first(doc, "type", "category"), "notification");
         String refId = first(doc, "refId", "referenceId", "orderId");
         String summary = "N\u1ed9i dung: " + body
-                + "\\n\u0110\u1ed1i t\u01b0\u1ee3ng: " + notificationTarget(doc)
-                + "\\nLo\u1ea1i: " + displayValue(type);
-        return refId.isEmpty() ? summary : summary + "\\nLi\u00ean k\u1ebft: " + refId;
+                + "\n\u0110\u1ed1i t\u01b0\u1ee3ng: " + notificationTarget(doc)
+                + "\nLo\u1ea1i: " + displayValue(type);
+        return refId.isEmpty() ? summary : summary + "\nLi\u00ean k\u1ebft: " + refId;
     }
 
     private String safe(String value, String fallback) {

@@ -1509,14 +1509,15 @@ public final class VLeagueApiClient {
 
     private List<String> parseTeamPlayers(String body) {
         List<String> rows = new ArrayList<>();
+        LinkedHashSet<String> seen = new LinkedHashSet<>();
         JsonObject root = JsonParser.parseString(body).getAsJsonObject();
-        appendTeamPlayerRows(rows, array(root, "players"));
-        appendTeamPlayerRows(rows, array(root, "foreignPlayers"));
-        appendTeamPlayerRows(rows, array(root, "nationalPlayers"));
+        appendTeamPlayerRows(rows, seen, array(root, "players"));
+        appendTeamPlayerRows(rows, seen, array(root, "foreignPlayers"));
+        appendTeamPlayerRows(rows, seen, array(root, "nationalPlayers"));
         return rows;
     }
 
-    private void appendTeamPlayerRows(List<String> rows, JsonArray players) {
+    private void appendTeamPlayerRows(List<String> rows, LinkedHashSet<String> seen, JsonArray players) {
         if (players == null) return;
         for (JsonElement element : players) {
             if (!element.isJsonObject()) continue;
@@ -1528,11 +1529,18 @@ public final class VLeagueApiClient {
             String position = firstNonEmpty(string(row, "position"), string(player, "position"));
             String shirt = firstNonEmpty(string(row, "shirtNumber"), string(player, "jerseyNumber"));
             String country = nestedString(player, "country", "name");
-            String suffix = "";
-            if (!shirt.isEmpty()) suffix += " #" + shirt;
-            if (!position.isEmpty()) suffix += " - " + position;
-            if (!country.isEmpty()) suffix += " - " + country;
-            rows.add(name + suffix);
+            Long playerId = longObject(player, "id");
+            String dedupeKey = playerId == null
+                    ? (name + "|" + shirt).toLowerCase(Locale.ROOT)
+                    : "id|" + playerId;
+            if (!seen.add(dedupeKey)) continue;
+            String photoUrl = playerId == null ? "" : "https://img.sofascore.com/api/v1/player/" + playerId + "/image";
+            rows.add("player|name=" + name
+                    + "|id=" + (playerId == null ? "" : playerId)
+                    + "|photo=" + photoUrl
+                    + "|shirt=" + shirt
+                    + "|pos=" + position
+                    + "|country=" + country);
         }
     }
 
